@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash_gradient"
+    tools:context=".activity.SplashActivity">
+
+    <!-- =============================================
+         MAIN SPLASH CONTENT — Glassmorphism Card
+         ============================================= -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardGlassmorphism"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#1A004371"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.42">
+
+        <!-- Inner container with overlay + blur effect (simulated via background) -->
+        <LinearLayout
+            android:id="@+id/layoutLogoSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingTop="48dp"
+            android:paddingBottom="48dp"
+            android:background="@drawable/bg_card_glass">
+
+            <!-- Logo Section -->
+            <LinearLayout
+                android:id="@+id/layoutLogoIcon"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:gravity="center"
+                android:background="@drawable/bg_logo_circle"
+                android:orientation="vertical">
+
+                <!-- Kabarin Brand Logo — Article/News icon -->
+                <ImageView
+                    android:id="@+id/imgKabarinLogo"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_kabarin_logo"
+                    android:contentDescription="Kabarin Logo"
+                    app:tint="#004371" />
+
+            </LinearLayout>
+
+            <!-- Brand Identity -->
+            <!-- Heading 1: App Name -->
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Kabarin"
+                android:textColor="#004371"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.02" />
+
+            <!-- Tagline Text -->
+            <TextView
+                android:id="@+id/tvTagline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Stay Updated, Stay Informed"
+                android:textColor="#99004371"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- =============================================
+         BOTTOM SECTION — Premium Editorial Label
+         ============================================= -->
+    <TextView
+        android:id="@+id/tvPremiumLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="WELCOME !"
+        android:textColor="#66004371"
+        android:textSize="10sp"
+        android:textStyle="normal"
+        android:letterSpacing="0.18"
+        android:fontFamily="sans-serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

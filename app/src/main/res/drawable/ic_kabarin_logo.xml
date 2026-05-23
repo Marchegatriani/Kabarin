@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/ic_kabarin_logo.xml (Vector Drawable) -->
+<!--
+    Icon artikel/berita sesuai logo Kabarin di Figma
+    Berupa 3 baris teks dalam kotak rounded — news/article icon
+    Warna utama: #004371
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Kotak utama (rounded rectangle) -->
+    <path
+        android:fillColor="#004371"
+        android:pathData="M8,10 C8,7.79 9.79,6 12,6 L36,6 C38.21,6 40,7.79 40,10 L40,38 C40,40.21 38.21,42 36,42 L12,42 C9.79,42 8,40.21 8,38 Z" />
+
+    <!-- Baris 1 teks (putih) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,16 L34,16 C34.55,16 35,16.45 35,17 L35,19 C35,19.55 34.55,20 34,20 L14,20 C13.45,20 13,19.55 13,19 L13,17 C13,16.45 13.45,16 14,16 Z" />
+
+    <!-- Baris 2 teks (putih) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,23 L34,23 C34.55,23 35,23.45 35,24 L35,26 C35,26.55 34.55,27 34,27 L14,27 C13.45,27 13,26.55 13,26 L13,24 C13,23.45 13.45,23 14,23 Z" />
+
+    <!-- Baris 3 teks pendek (putih) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,30 L26,30 C26.55,30 27,30.45 27,31 L27,33 C27,33.55 26.55,34 26,34 L14,34 C13.45,34 13,33.55 13,33 L13,31 C13,30.45 13.45,30 14,30 Z" />
+
+</vector>
