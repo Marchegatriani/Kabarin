@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item saved article: thumbnail kiri, konten kanan, bookmark icon kanan bawah -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Thumbnail kiri -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/ivArticleImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Thumbnail"
+                android:src="@android:color/darker_gray" />
+
+            <!-- Checkmark icon di pojok kiri atas thumbnail -->
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="top|start"
+                android:layout_margin="4dp"
+                android:src="@android:drawable/checkbox_on_background"
+                android:contentDescription="Saved"
+                app:tint="#FFFFFF" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Konten tengah -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp">
+
+            <!-- Badge kategori pakai Chip -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TECHNOLOGY"
+                    android:textColor="#004371"
+                    android:textSize="9sp"
+                    android:textAllCaps="true"
+                    app:chipBackgroundColor="#00000000"
+                    app:chipStrokeWidth="0dp"
+                    app:chipCornerRadius="0dp"
+                    app:chipMinHeight="20dp"
+                    app:chipStartPadding="0dp"
+                    app:chipEndPadding="0dp"
+                    style="@style/Widget.MaterialComponents.Chip.Action" />
+
+                <!-- Verified/check icon setelah kategori -->
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="2dp"
+                    android:src="@android:drawable/ic_menu_info_details"
+                    android:contentDescription="Verified"
+                    app:tint="#004371" />
+
+            </LinearLayout>
+
+            <!-- Judul artikel -->
+            <TextView
+                android:id="@+id/tvArticleTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The Future of Silicon: Next-Gen Quantum..."
+                android:textColor="#0A1D2D"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp" />
+
+            <!-- Waktu disimpan -->
+            <TextView
+                android:id="@+id/tvSavedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Saved 2 days ago"
+                android:textColor="#A0A8B0"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+        <!-- Bookmark icon merah di kanan -->
+        <ImageView
+            android:id="@+id/ivBookmark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom"
+            android:src="@android:drawable/ic_menu_save"
+            android:contentDescription="Bookmark"
+            app:tint="#BA1A1A" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

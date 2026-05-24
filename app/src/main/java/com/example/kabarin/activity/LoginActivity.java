@@ -24,42 +24,59 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Inisialisasi View
+        // Inisialisasi View menggunakan findViewById
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvSignUp = findViewById(R.id.tvSignUp);
 
-        // Tombol Login
+        // Logika Tombol Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = etEmail.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
+                // 1. Ambil input dari EditText
+                String inputEmailOrUser = etEmail.getText().toString().trim();
+                String inputPassword = etPassword.getText().toString().trim();
 
-                // Validasi input
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Email dan password tidak boleh kosong", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Dummy login: Simpan session ke SharedPreferences
-                    SharedPreferences sharedPreferences = getSharedPreferences("KabarinPrefs", MODE_PRIVATE);
+                // 2. Ambil data akun yang tersimpan dari SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("KabarinPrefs", MODE_PRIVATE);
+                String savedUsername = sharedPreferences.getString("savedUsername", "");
+                String savedEmail = sharedPreferences.getString("savedEmail", "");
+                String savedPassword = sharedPreferences.getString("savedPassword", "");
+
+                // Validasi field tidak kosong
+                if (inputEmailOrUser.isEmpty() || inputPassword.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Username/Email and password cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 3. Bandingkan input dengan data tersimpan
+                // Login berhasil jika: (email ATAU username cocok) DAN password cocok
+                boolean isUserMatch = inputEmailOrUser.equals(savedUsername) || inputEmailOrUser.equals(savedEmail);
+                boolean isPasswordMatch = inputPassword.equals(savedPassword);
+
+                if (isUserMatch && isPasswordMatch) {
+                    // 4. Jika Benar: Simpan status login & navigasi
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("isLogin", true);
                     editor.apply();
 
-                    // Pindah ke MainActivity
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
+                } else {
+                    // 5. Jika Salah: Tampilkan Toast error
+                    Toast.makeText(LoginActivity.this, "Account not found or password incorrect", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        // Teks Daftar (Sign Up)
+        // Navigasi ke halaman Register
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Pindah ke RegisterActivity
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }

@@ -1,6 +1,7 @@
 package com.example.kabarin.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +47,14 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (!password.equals(confirmPassword)) {
                     Toast.makeText(RegisterActivity.this, "Password tidak cocok", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Berhasil registrasi (dummy)
+                    // Simpan data akun ke SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("KabarinPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("savedUsername", fullName);
+                    editor.putString("savedEmail", email);
+                    editor.putString("savedPassword", password);
+                    editor.apply();
+
                     Toast.makeText(RegisterActivity.this, "Register successful", Toast.LENGTH_SHORT).show();
                     
                     // Kembali ke LoginActivity
@@ -61,8 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
         tvBackToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Selesaikan activity ini untuk kembali ke Login (jika datang dari Login)
-                // Atau start activity baru jika diperlukan
                 finish();
             }
         });
