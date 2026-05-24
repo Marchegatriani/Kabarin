@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:text="Don\'t have an account? Sign up for free"
+                    android:text="Don\'t have an account? Sign up here!"
                     android:textColor="#004371"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif" />

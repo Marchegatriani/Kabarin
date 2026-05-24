@@ -46,14 +46,6 @@
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium" />
 
-            <ImageView
-                android:id="@+id/ivProfileIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_more"
-                android:contentDescription="Menu Profile"
-                app:tint="#41474F" />
-
         </LinearLayout>
 
         <!-- =============================================

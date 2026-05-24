@@ -48,16 +48,6 @@
                 android:fontFamily="sans-serif-medium" />
 
             <!-- Avatar / Profile icon kanan -->
-            <ImageView
-                android:id="@+id/ivProfile"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@android:drawable/ic_menu_myplaces"
-                android:contentDescription="Profile"
-                android:backgroundTint="#1A004371"
-                android:background="@android:drawable/dialog_holo_light_frame"
-                android:padding="6dp"
-                app:tint="#004371" />
 
         </LinearLayout>
 

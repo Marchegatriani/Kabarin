@@ -22,7 +22,6 @@
         android:background="#FFFFFF"
         app:itemIconTint="@color/selector_bottom_nav"
         app:itemTextColor="@color/selector_bottom_nav"
-        app:itemActiveIndicatorColor="#1A004371"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu"
         app:elevation="8dp" />
