@@ -11,23 +11,32 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kabarin.R;
-import com.example.kabarin.model.News;
+import com.example.kabarin.adapter.NewsAdapter;
+import com.example.kabarin.api.RetrofitClient;
+import com.example.kabarin.model.Article;
+import com.example.kabarin.model.NewsResponse;
+import com.example.kabarin.utils.Constants;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * HomeFragment untuk menampilkan daftar berita terbaru dan trending.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
 
     private RecyclerView rvTrending, rvLatestNews;
     private ChipGroup chipGroupCategories;
+    private SwipeRefreshLayout swipeRefresh;
     private FloatingActionButton fabSearch;
+    private NewsAdapter latestNewsAdapter, trendingNewsAdapter;
+    private String currentCategory = "general";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -36,7 +45,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate layout fragment_home
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -44,45 +52,71 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Inisialisasi View menggunakan findViewById
+        // 1. Inisialisasi View
         rvTrending = view.findViewById(R.id.rvTrending);
         rvLatestNews = view.findViewById(R.id.rvLatestNews);
         chipGroupCategories = view.findViewById(R.id.chipGroupCategories);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         fabSearch = view.findViewById(R.id.fab);
 
-        // 2. Setup RecyclerView dengan data dummy
-        setupRecyclerViews();
+        // 2. Setup RecyclerView
+        rvTrending.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvLatestNews.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // 3. Listener untuk Chip Group (Kategori)
+        // 3. Load Berita Awal
+        refreshData();
+
+        // 4. Swipe Refresh Listener
+        swipeRefresh.setOnRefreshListener(() -> {
+            refreshData();
+        });
+
+        // 5. Category Listener
         chipGroupCategories.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
-                // Nantinya bisa digunakan untuk filter berita berdasarkan kategori
-                Toast.makeText(getContext(), "Filter kategori aktif", Toast.LENGTH_SHORT).show();
+                Chip selectedChip = view.findViewById(checkedIds.get(0));
+                String category = selectedChip.getText().toString().toLowerCase();
+                currentCategory = category.equals("all") ? "general" : category;
+                refreshData();
             }
         });
 
-        // 4. Listener untuk FAB Search
-        fabSearch.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Fitur pencarian segera hadir", Toast.LENGTH_SHORT).show();
-        });
+        fabSearch.setOnClickListener(v -> Toast.makeText(getContext(), "Search Feature Coming Soon", Toast.LENGTH_SHORT).show());
     }
 
-    private void setupRecyclerViews() {
-        // Membuat list data dummy
-        List<News> dummyNewsList = new ArrayList<>();
-        dummyNewsList.add(new News("Terobosan Teknologi AI 2024", "Technology", "AI semakin mendominasi pasar global..."));
-        dummyNewsList.add(new News("Timnas Indonesia Menang Telak", "Sports", "Pertandingan semalam berakhir dengan skor 3-0..."));
-        dummyNewsList.add(new News("IHSG Menguat Hari Ini", "Business", "Pasar saham menunjukkan tren positif..."));
+    private void refreshData() {
+        swipeRefresh.setRefreshing(true);
+        fetchNews(currentCategory, true);  // Trending
+        fetchNews(currentCategory, false); // Latest
+    }
 
-        // Setup RecyclerView Trending (Horizontal)
-        rvTrending.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        // Catatan: Pasang adapter di sini nanti, misal: rvTrending.setAdapter(new NewsAdapter(dummyNewsList));
+    private void fetchNews(String category, boolean isTrending) {
+        RetrofitClient.getApiService().getTopHeadlines("us", category, Constants.API_KEY)
+                .enqueue(new Callback<NewsResponse>() {
+                    @Override
+                    public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+                        if (isAdded() && isVisible()) {
+                            swipeRefresh.setRefreshing(false);
+                            if (response.isSuccessful() && response.body() != null) {
+                                List<Article> articles = response.body().getArticles();
+                                if (isTrending) {
+                                    trendingNewsAdapter = new NewsAdapter(articles);
+                                    rvTrending.setAdapter(trendingNewsAdapter);
+                                } else {
+                                    latestNewsAdapter = new NewsAdapter(articles);
+                                    rvLatestNews.setAdapter(latestNewsAdapter);
+                                }
+                            }
+                        }
+                    }
 
-        // Setup RecyclerView Latest News (Vertical)
-        rvLatestNews.setLayoutManager(new LinearLayoutManager(getContext()));
-        // Catatan: rvLatestNews.setAdapter(new NewsAdapter(dummyNewsList));
-        
-        // Pesan indikator untuk menunjukkan struktur sudah siap
-        Toast.makeText(getContext(), "Daftar berita siap dimuat", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onFailure(Call<NewsResponse> call, Throwable t) {
+                        if (isAdded()) {
+                            swipeRefresh.setRefreshing(false);
+                            Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

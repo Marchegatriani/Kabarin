@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F9FF"
-    tools:context="fragment.HomeFragment">
+    tools:context=".fragment.HomeFragment">
 
     <!-- =============================================
-         HEADER — TopAppBar: Burger Menu + "Kabarin" + icon kanan
+         HEADER — TopAppBar: Burger Menu + "Kabarin"
          ============================================= -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -159,109 +159,116 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- =============================================
-         MAIN CONTENT — NestedScrollView
+         MAIN CONTENT — SwipeRefreshLayout + NestedScrollView
          ============================================= -->
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="80dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <!-- Section Header: Trending Headlines -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="10dp">
+                android:orientation="vertical"
+                android:paddingBottom="80dp">
 
-                <TextView
-                    android:layout_width="0dp"
+                <!-- Section Header: Trending Headlines -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Trending Headlines"
-                    android:textColor="#0A1D2D"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="10dp">
 
-                <TextView
-                    android:id="@+id/tvViewAllTrending"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Trending Headlines"
+                        android:textColor="#0A1D2D"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:id="@+id/tvViewAllTrending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View All ›"
+                        android:textColor="#004371"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif" />
+
+                </LinearLayout>
+
+                <!-- RecyclerView Trending — horizontal -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTrending"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_news" />
+
+                <!-- Section Header: Latest News -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="View All ›"
-                    android:textColor="#004371"
-                    android:textSize="12sp"
-                    android:fontFamily="sans-serif" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Latest News"
+                        android:textColor="#0A1D2D"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <ImageView
+                        android:id="@+id/ivFilterLatest"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_menu_sort_by_size"
+                        android:contentDescription="Filter"
+                        app:tint="#727780" />
+
+                </LinearLayout>
+
+                <!-- RecyclerView Latest News — vertical -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvLatestNews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_news" />
 
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            <!-- RecyclerView Trending — horizontal -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTrending"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_trending_news" />
-
-            <!-- Section Header: Latest News -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Latest News"
-                    android:textColor="#0A1D2D"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium" />
-
-                <ImageView
-                    android:id="@+id/ivFilterLatest"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@android:drawable/ic_menu_sort_by_size"
-                    android:contentDescription="Filter"
-                    app:tint="#727780" />
-
-            </LinearLayout>
-
-            <!-- RecyclerView Latest News — vertical -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvLatestNews"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_latest_news" />
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
