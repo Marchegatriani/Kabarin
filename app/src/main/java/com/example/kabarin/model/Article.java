@@ -1,8 +1,15 @@
 package com.example.kabarin.model;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class Article {
+public class Article implements Serializable {
+    @SerializedName("source")
+    private Source source;
+
+    @SerializedName("author")
+    private String author;
+
     @SerializedName("title")
     private String title;
 
@@ -20,6 +27,14 @@ public class Article {
 
     @SerializedName("url")
     private String url;
+
+    public Source getSource() {
+        return source;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
 
     public String getTitle() {
         return title;
@@ -43,5 +58,21 @@ public class Article {
 
     public String getUrl() {
         return url;
+    }
+
+    public static class Source implements Serializable {
+        @SerializedName("id")
+        private String id;
+
+        @SerializedName("name")
+        private String name;
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

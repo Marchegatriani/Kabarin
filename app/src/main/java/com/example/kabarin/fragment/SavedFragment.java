@@ -1,10 +1,11 @@
 package com.example.kabarin.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,20 +14,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kabarin.R;
-import com.example.kabarin.model.News;
+import com.example.kabarin.activity.NewsDetailActivity;
+import com.example.kabarin.adapter.SavedNewsAdapter;
+import com.example.kabarin.model.Article;
+import com.example.kabarin.utils.SavedNewsManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SavedFragment extends Fragment {
 
     private RecyclerView rvSavedArticles;
-    // Jika di XML ada view empty state (misal: layout atau TextView), inisialisasi di sini
-    // private View layoutEmptyState; 
+    private LinearLayout layoutEmpty;
+    private SavedNewsAdapter adapter;
+    private SavedNewsManager savedNewsManager;
 
-    public SavedFragment() {
-        // Required empty public constructor
-    }
+    public SavedFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,36 +40,40 @@ public class SavedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Inisialisasi RecyclerView menggunakan findViewById
         rvSavedArticles = view.findViewById(R.id.rvSavedArticles);
-        // layoutEmptyState = view.findViewById(R.id.layoutEmpty); // Sesuaikan ID jika ada
-
-        // 2. Setup RecyclerView dengan data dummy
+        // Assuming you might add a layoutEmpty in the XML if needed
+        // For now, let's just handle the list
+        
+        savedNewsManager = new SavedNewsManager(requireContext());
         setupRecyclerView();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshSavedList();
+    }
+
     private void setupRecyclerView() {
-        // Simulasi data tersimpan (dummy)
-        List<News> savedList = new ArrayList<>();
-        savedList.add(new News("Judul Berita Tersimpan 1", "Politics", "Isi deskripsi berita..."));
-        savedList.add(new News("Judul Berita Tersimpan 2", "Business", "Isi deskripsi berita..."));
+        rvSavedArticles.setLayoutManager(new LinearLayoutManager(getContext()));
+        refreshSavedList();
+    }
 
-        // 3. Logika Empty State
-        if (savedList.isEmpty()) {
-            rvSavedArticles.setVisibility(View.GONE);
-            // if (layoutEmptyState != null) layoutEmptyState.setVisibility(View.VISIBLE);
-        } else {
-            rvSavedArticles.setVisibility(View.VISIBLE);
-            // if (layoutEmptyState != null) layoutEmptyState.setVisibility(View.GONE);
-
-            // Setup LayoutManager
-            rvSavedArticles.setLayoutManager(new LinearLayoutManager(getContext()));
-            
-            // Placeholder: Pasang adapter di sini nanti
-            // NewsAdapter adapter = new NewsAdapter(savedList);
-            // rvSavedArticles.setAdapter(adapter);
-            
-            Toast.makeText(getContext(), "Berita tersimpan berhasil dimuat", Toast.LENGTH_SHORT).show();
-        }
+    private void refreshSavedList() {
+        List<Article> savedArticles = savedNewsManager.getSavedArticles();
+        
+        adapter = new SavedNewsAdapter(savedArticles);
+        adapter.setOnItemClickListener(article -> {
+            Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+            intent.putExtra("article", article);
+            startActivity(intent);
+        });
+        
+        adapter.setOnRemoveClickListener(article -> {
+            savedNewsManager.removeArticle(article);
+            refreshSavedList();
+        });
+        
+        rvSavedArticles.setAdapter(adapter);
     }
 }

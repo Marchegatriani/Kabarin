@@ -5,282 +5,263 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F9FF"
-    tools:context=".fragment.HomeFragment">
+    android:background="#F5F7FA">
 
-    <!-- =============================================
-         HEADER — TopAppBar: Burger Menu + "Kabarin"
-         ============================================= -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:elevation="2dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <!-- Burger Menu Icon -->
-            <ImageView
-                android:id="@+id/ivMenu"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="12dp"
-                android:src="@android:drawable/ic_menu_sort_by_size"
-                android:contentDescription="Menu"
-                app:tint="#0A1D2D" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Kabarin"
-                android:textColor="#004371"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium" />
-
-        </LinearLayout>
-
-        <!-- =============================================
-             CATEGORY TABS — Chip horizontal scrollable
-             ============================================= -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="10dp">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupCategories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:singleSelection="true"
-                app:selectionRequired="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="All"
-                    android:textSize="12sp"
-                    android:checked="true"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipTechnology"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Technology"
-                    android:textSize="12sp"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipSports"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sports"
-                    android:textSize="12sp"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipBusiness"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Business"
-                    android:textSize="12sp"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPolitics"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Politics"
-                    android:textSize="12sp"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipHealth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Health"
-                    android:textSize="12sp"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipEntertainment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Entertainment"
-                    android:textSize="12sp"
-                    android:textColor="@color/selector_chip_text"
-                    app:chipBackgroundColor="@color/selector_chip_bg"
-                    app:chipStrokeWidth="0dp"
-                    app:chipCornerRadius="100dp"
-                    style="@style/Widget.MaterialComponents.Chip.Choice" />
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </HorizontalScrollView>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- =============================================
-         MAIN CONTENT — SwipeRefreshLayout + NestedScrollView
-         ============================================= -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="80dp">
+                android:orientation="vertical">
 
-                <!-- Section Header: Trending Headlines -->
+                <!-- TOP APP BAR -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="10dp">
+                    android:background="#FFFFFF">
+
+                    <TextView
+                        android:id="@+id/btnMenu"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="≡"
+                        android:textSize="28sp"
+                        android:textColor="#0D1B2A"
+                        android:gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="Menu" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Trending Headlines"
-                        android:textColor="#0A1D2D"
-                        android:textSize="16sp"
+                        android:text="Kabarin"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium" />
+                        android:textColor="#0D1B2A"
+                        android:layout_marginStart="8dp" />
 
                     <TextView
-                        android:id="@+id/tvViewAllTrending"
+                        android:id="@+id/tvAvatar"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:text="K"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center"
+                        android:contentDescription="Profile"
+                        android:background="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E8ECF0" />
+
+                <!-- CATEGORY CHIPS -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:background="#FFFFFF"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupCategories"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="View All ›"
-                        android:textColor="#004371"
-                        android:textSize="12sp"
-                        android:fontFamily="sans-serif" />
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
 
-                </LinearLayout>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAll"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="All"
+                            android:checked="true"
+                            app:chipBackgroundColor="@color/selector_chip_bg"
+                            android:textColor="@color/selector_chip_text"
+                            app:chipStrokeWidth="0dp"
+                            app:chipCornerRadius="18dp" />
 
-                <!-- RecyclerView Trending — horizontal -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvTrending"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_news" />
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipTechnology"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="Technology"
+                            app:chipBackgroundColor="@color/selector_chip_bg"
+                            android:textColor="@color/selector_chip_text"
+                            app:chipStrokeWidth="0dp"
+                            app:chipCornerRadius="18dp" />
 
-                <!-- Section Header: Latest News -->
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSports"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="Sports"
+                            app:chipBackgroundColor="@color/selector_chip_bg"
+                            android:textColor="@color/selector_chip_text"
+                            app:chipStrokeWidth="0dp"
+                            app:chipCornerRadius="18dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBusiness"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="Business"
+                            app:chipBackgroundColor="@color/selector_chip_bg"
+                            android:textColor="@color/selector_chip_text"
+                            app:chipStrokeWidth="0dp"
+                            app:chipCornerRadius="18dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipHealth"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="Health"
+                            app:chipBackgroundColor="@color/selector_chip_bg"
+                            android:textColor="@color/selector_chip_text"
+                            app:chipStrokeWidth="0dp"
+                            app:chipCornerRadius="18dp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+
+                <!-- TRENDING HEADLINES -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:orientation="vertical"
                     android:paddingTop="20dp"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="8dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Latest News"
-                        android:textColor="#0A1D2D"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="12dp">
 
-                    <ImageView
-                        android:id="@+id/ivFilterLatest"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@android:drawable/ic_menu_sort_by_size"
-                        android:contentDescription="Filter"
-                        app:tint="#727780" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Trending Headlines"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#0D1B2A" />
+
+                        <TextView
+                            android:id="@+id/tvViewAllTrending"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View All →"
+                            android:textSize="13sp"
+                            android:textColor="#1565C0"
+                            android:padding="4dp" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTrending"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="8dp"
+                        android:clipToPadding="false"
+                        tools:listitem="@layout/item_trending_news" />
 
                 </LinearLayout>
 
-                <!-- RecyclerView Latest News — vertical -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvLatestNews"
+                <!-- LATEST NEWS -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_news" />
+                    android:orientation="vertical"
+                    android:paddingTop="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Latest News"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#0D1B2A" />
+
+                        <TextView
+                            android:id="@+id/tvFilter"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:text="≡"
+                            android:textSize="20sp"
+                            android:textColor="#0D1B2A"
+                            android:gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Filter" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvLatestNews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="80dp"
+                        android:clipToPadding="false"
+                        tools:listitem="@layout/item_news" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:src="@android:drawable/ic_search_category_default"
         android:contentDescription="Search"
-        android:src="@android:drawable/ic_menu_search"
-        app:backgroundTint="#004371"
-        app:tint="#FFFFFF"
-        app:elevation="6dp" />
+        app:backgroundTint="#1565C0"
+        app:tint="#FFFFFF" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

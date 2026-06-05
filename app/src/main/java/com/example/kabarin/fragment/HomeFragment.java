@@ -1,5 +1,6 @@
 package com.example.kabarin.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kabarin.R;
+import com.example.kabarin.activity.NewsDetailActivity;
 import com.example.kabarin.adapter.NewsAdapter;
 import com.example.kabarin.api.RetrofitClient;
 import com.example.kabarin.model.Article;
@@ -35,12 +37,9 @@ public class HomeFragment extends Fragment {
     private ChipGroup chipGroupCategories;
     private SwipeRefreshLayout swipeRefresh;
     private FloatingActionButton fabSearch;
-    private NewsAdapter latestNewsAdapter, trendingNewsAdapter;
     private String currentCategory = "general";
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,71 +51,82 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Inisialisasi View
-        rvTrending = view.findViewById(R.id.rvTrending);
-        rvLatestNews = view.findViewById(R.id.rvLatestNews);
+        rvTrending        = view.findViewById(R.id.rvTrending);
+        rvLatestNews      = view.findViewById(R.id.rvLatestNews);
         chipGroupCategories = view.findViewById(R.id.chipGroupCategories);
-        swipeRefresh = view.findViewById(R.id.swipeRefresh);
-        fabSearch = view.findViewById(R.id.fab);
+        swipeRefresh      = view.findViewById(R.id.swipeRefresh);
+        fabSearch         = view.findViewById(R.id.fab);
 
-        // 2. Setup RecyclerView
-        rvTrending.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvTrending.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvLatestNews.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvLatestNews.setNestedScrollingEnabled(false);
 
-        // 3. Load Berita Awal
-        refreshData();
-
-        // 4. Swipe Refresh Listener
-        swipeRefresh.setOnRefreshListener(() -> {
-            refreshData();
-        });
-
-        // 5. Category Listener
         chipGroupCategories.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
-                Chip selectedChip = view.findViewById(checkedIds.get(0));
-                String category = selectedChip.getText().toString().toLowerCase();
-                currentCategory = category.equals("all") ? "general" : category;
-                refreshData();
+                Chip selectedChip = group.findViewById(checkedIds.get(0));
+                if (selectedChip != null) {
+                    String categoryStr = selectedChip.getText().toString().toLowerCase();
+                    currentCategory = categoryStr.equals("all") ? "general" : categoryStr;
+                    refreshData();
+                }
             }
         });
 
-        fabSearch.setOnClickListener(v -> Toast.makeText(getContext(), "Search Feature Coming Soon", Toast.LENGTH_SHORT).show());
+        refreshData();
+
+        swipeRefresh.setColorSchemeResources(R.color.selector_chip_bg);
+        swipeRefresh.setOnRefreshListener(this::refreshData);
+
+        fabSearch.setOnClickListener(v ->
+                Toast.makeText(getContext(), "Search Feature Coming Soon", Toast.LENGTH_SHORT).show());
     }
 
     private void refreshData() {
-        swipeRefresh.setRefreshing(true);
-        fetchNews(currentCategory, true);  // Trending
-        fetchNews(currentCategory, false); // Latest
+        if (swipeRefresh != null) swipeRefresh.setRefreshing(true);
+        fetchNews(currentCategory, true);   
+        fetchNews(currentCategory, false);  
     }
 
-    private void fetchNews(String category, boolean isTrending) {
-        RetrofitClient.getApiService().getTopHeadlines("us", category, Constants.API_KEY)
+    private void fetchNews(final String categoryToFetch, boolean isTrending) {
+        RetrofitClient.getApiService()
+                .getTopHeadlines("us", categoryToFetch, Constants.API_KEY)
                 .enqueue(new Callback<NewsResponse>() {
+
                     @Override
                     public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
-                        if (isAdded() && isVisible()) {
-                            swipeRefresh.setRefreshing(false);
-                            if (response.isSuccessful() && response.body() != null) {
-                                List<Article> articles = response.body().getArticles();
-                                if (isTrending) {
-                                    trendingNewsAdapter = new NewsAdapter(articles);
-                                    rvTrending.setAdapter(trendingNewsAdapter);
-                                } else {
-                                    latestNewsAdapter = new NewsAdapter(articles);
-                                    rvLatestNews.setAdapter(latestNewsAdapter);
-                                }
+                        if (!isAdded() || !isVisible()) return;
+                        if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<Article> articles = response.body().getArticles();
+                            if (articles == null) return;
+
+                            if (isTrending) {
+                                List<Article> trendingList = articles.size() > 5 ? articles.subList(0, 5) : articles;
+                                NewsAdapter trendingAdapter = new NewsAdapter(trendingList, NewsAdapter.TYPE_TRENDING, categoryToFetch);
+                                trendingAdapter.setOnItemClickListener(article -> openDetail(article));
+                                rvTrending.setAdapter(trendingAdapter);
+                            } else {
+                                NewsAdapter latestAdapter = new NewsAdapter(articles, NewsAdapter.TYPE_LATEST, categoryToFetch);
+                                latestAdapter.setOnItemClickListener(article -> openDetail(article));
+                                rvLatestNews.setAdapter(latestAdapter);
                             }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
-                        if (isAdded()) {
-                            swipeRefresh.setRefreshing(false);
-                            Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                        if (!isAdded()) return;
+                        if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+                        Toast.makeText(getContext(), "Gagal memuat berita", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void openDetail(Article article) {
+        Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+        intent.putExtra("article", article);
+        startActivity(intent);
     }
 }

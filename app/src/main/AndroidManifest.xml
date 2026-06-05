@@ -42,7 +42,13 @@
 
         <!-- DetailActivity for displaying news content -->
         <activity
-            android:name=".activity.DetailActivity"
+            android:name=".activity.NewsDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <!-- NewsWebActivity for displaying full article in WebView -->
+        <activity
+            android:name=".activity.NewsWebActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
