@@ -35,9 +35,9 @@ public class SearchActivity extends AppCompatActivity {
     private SearchView searchView;
     private RecyclerView rvSearchResult;
     private ProgressBar progressBar;
-    private LinearLayout layoutNoResult;
-    private ImageView ivStatus;
-    private TextView tvStatus;
+    private LinearLayout layoutSearchStatus;
+    private ImageView ivSearchStatus;
+    private TextView tvSearchStatus;
     private Button btnRetry;
     private String lastQuery = "";
 
@@ -46,17 +46,14 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        // Initialize Views
+        // Initialize Views dengan ID yang benar sesuai activity_search.xml
         btnBack = findViewById(R.id.btnBack);
         searchView = findViewById(R.id.searchView);
         rvSearchResult = findViewById(R.id.rvSearchResult);
         progressBar = findViewById(R.id.progressBar);
-        
-        // PERBAIKAN: ID di XML adalah 'layoutStatus', bukan 'layoutNoResult'
-        layoutNoResult = findViewById(R.id.layoutSearchStatus);
-        ivStatus = findViewById(R.id.ivSearchStatus);
-        tvStatus = findViewById(R.id.tvSearchStatus);
-        
+        layoutSearchStatus = findViewById(R.id.layoutSearchStatus);
+        ivSearchStatus = findViewById(R.id.ivSearchStatus);
+        tvSearchStatus = findViewById(R.id.tvSearchStatus);
         btnRetry = findViewById(R.id.btnRetry);
 
         rvSearchResult.setLayoutManager(new LinearLayoutManager(this));
@@ -90,7 +87,7 @@ public class SearchActivity extends AppCompatActivity {
     private void performSearch(String query) {
         progressBar.setVisibility(View.VISIBLE);
         rvSearchResult.setVisibility(View.GONE);
-        layoutNoResult.setVisibility(View.GONE);
+        layoutSearchStatus.setVisibility(View.GONE);
         btnRetry.setVisibility(View.GONE);
 
         RetrofitClient.getApiService().getEverything(query, Constants.API_KEY)
@@ -113,15 +110,14 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
                         progressBar.setVisibility(View.GONE);
-                        showErrorState("Masalah koneksi: " + t.getMessage());
-                        Toast.makeText(SearchActivity.this, "Gagal terhubung ke internet", Toast.LENGTH_SHORT).show();
+                        showErrorState("Masalah koneksi. Periksa internet Anda.");
                     }
                 });
     }
 
     private void showResults(List<Article> articles) {
         rvSearchResult.setVisibility(View.VISIBLE);
-        layoutNoResult.setVisibility(View.GONE);
+        layoutSearchStatus.setVisibility(View.GONE);
 
         NewsAdapter adapter = new NewsAdapter(articles, NewsAdapter.TYPE_LATEST, "Search Result");
         adapter.setOnItemClickListener(article -> {
@@ -134,17 +130,17 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showEmptyState(String message) {
         rvSearchResult.setVisibility(View.GONE);
-        layoutNoResult.setVisibility(View.VISIBLE);
-        ivStatus.setImageResource(android.R.drawable.ic_menu_search);
-        tvStatus.setText(message);
+        layoutSearchStatus.setVisibility(View.VISIBLE);
+        ivSearchStatus.setImageResource(android.R.drawable.ic_menu_search);
+        tvSearchStatus.setText(message);
         btnRetry.setVisibility(View.GONE);
     }
 
     private void showErrorState(String message) {
         rvSearchResult.setVisibility(View.GONE);
-        layoutNoResult.setVisibility(View.VISIBLE);
-        ivStatus.setImageResource(android.R.drawable.stat_notify_error);
-        tvStatus.setText(message);
+        layoutSearchStatus.setVisibility(View.VISIBLE);
+        ivSearchStatus.setImageResource(android.R.drawable.stat_notify_error);
+        tvSearchStatus.setText(message);
         btnRetry.setVisibility(View.VISIBLE);
     }
 }

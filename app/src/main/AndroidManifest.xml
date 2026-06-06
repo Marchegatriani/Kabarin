@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kabarin">
 
-        <!-- SplashActivity as the launcher -->
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true"
@@ -24,40 +29,13 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activity.WelcomeActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".activity.LoginActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".activity.RegisterActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="false" />
-
-        <!-- DetailActivity for displaying news content -->
-        <activity
-            android:name=".activity.NewsDetailActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <!-- NewsWebActivity for displaying full article in WebView -->
-        <activity
-            android:name=".activity.NewsWebActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <!-- SearchActivity for searching news -->
-        <activity
-            android:name=".activity.SearchActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.WelcomeActivity" android:exported="false" />
+        <activity android:name=".activity.LoginActivity" android:exported="false" />
+        <activity android:name=".activity.RegisterActivity" android:exported="false" />
+        <activity android:name=".activity.MainActivity" android:exported="false" />
+        <activity android:name=".activity.NewsDetailActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.NewsWebActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.SearchActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
-
 </manifest>

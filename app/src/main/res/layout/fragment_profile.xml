@@ -42,7 +42,6 @@
             android:textColor="#0D1B2A"
             android:layout_marginStart="8dp" />
 
-        <!-- Tombol Save -->
         <TextView
             android:id="@+id/tvSave"
             android:layout_width="wrap_content"
@@ -65,7 +64,6 @@
         android:background="#E8ECF0"
         app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
 
-    <!-- ===== SCROLLABLE CONTENT ===== -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -102,7 +100,7 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_profile"
                         android:background="#D0E4F7"
-                        android:padding="4dp"
+                        android:padding="2dp"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
                         app:strokeColor="#FFFFFF"
                         app:strokeWidth="4dp" />
@@ -138,7 +136,6 @@
 
             </LinearLayout>
 
-            <!-- Information Fields -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,6 +145,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Full Name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,6 +177,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Bio -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -213,6 +212,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Location -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -223,6 +223,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tlLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="28dp"
@@ -233,6 +234,9 @@
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:hintEnabled="false"
                 app:startIconDrawable="@android:drawable/ic_menu_mylocation"
+                app:endIconMode="custom"
+                app:endIconDrawable="@android:drawable/ic_menu_compass"
+                app:endIconContentDescription="Ambil Lokasi Saat Ini"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText

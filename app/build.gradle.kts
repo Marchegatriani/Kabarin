@@ -45,6 +45,9 @@ dependencies {
     // Chrome Custom Tabs
     implementation("androidx.browser:browser:1.8.0")
 
+    // Google Play Services for Location
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
