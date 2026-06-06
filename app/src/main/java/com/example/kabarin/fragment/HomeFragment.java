@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.kabarin.R;
 import com.example.kabarin.activity.NewsDetailActivity;
+import com.example.kabarin.activity.SearchActivity;
 import com.example.kabarin.adapter.NewsAdapter;
 import com.example.kabarin.api.RetrofitClient;
 import com.example.kabarin.model.Article;
@@ -78,8 +79,11 @@ public class HomeFragment extends Fragment {
         swipeRefresh.setColorSchemeResources(R.color.selector_chip_bg);
         swipeRefresh.setOnRefreshListener(this::refreshData);
 
-        fabSearch.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Search Feature Coming Soon", Toast.LENGTH_SHORT).show());
+        // Membuka SearchActivity saat FAB diklik
+        fabSearch.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SearchActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void refreshData() {

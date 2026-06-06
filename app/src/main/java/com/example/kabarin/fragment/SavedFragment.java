@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,13 +18,15 @@ import com.example.kabarin.activity.NewsDetailActivity;
 import com.example.kabarin.adapter.SavedNewsAdapter;
 import com.example.kabarin.model.Article;
 import com.example.kabarin.utils.SavedNewsManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
 public class SavedFragment extends Fragment {
 
     private RecyclerView rvSavedArticles;
-    private LinearLayout layoutEmpty;
+    private View cardEmptyState;
+    private Button btnExploreNews;
     private SavedNewsAdapter adapter;
     private SavedNewsManager savedNewsManager;
 
@@ -40,12 +42,26 @@ public class SavedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Inisialisasi View
         rvSavedArticles = view.findViewById(R.id.rvSavedArticles);
-        // Assuming you might add a layoutEmpty in the XML if needed
-        // For now, let's just handle the list
+        cardEmptyState  = view.findViewById(R.id.cardEmptyState);
+        btnExploreNews  = view.findViewById(R.id.btnExploreNews);
         
         savedNewsManager = new SavedNewsManager(requireContext());
-        setupRecyclerView();
+
+        rvSavedArticles.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Tombol Explore: Kembali ke tab Home
+        btnExploreNews.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottomNavigation);
+                if (bottomNav != null) {
+                    bottomNav.setSelectedItemId(R.id.nav_home);
+                }
+            }
+        });
+
+        refreshSavedList();
     }
 
     @Override
@@ -54,26 +70,31 @@ public class SavedFragment extends Fragment {
         refreshSavedList();
     }
 
-    private void setupRecyclerView() {
-        rvSavedArticles.setLayoutManager(new LinearLayoutManager(getContext()));
-        refreshSavedList();
-    }
-
     private void refreshSavedList() {
         List<Article> savedArticles = savedNewsManager.getSavedArticles();
         
-        adapter = new SavedNewsAdapter(savedArticles);
-        adapter.setOnItemClickListener(article -> {
-            Intent intent = new Intent(getContext(), NewsDetailActivity.class);
-            intent.putExtra("article", article);
-            startActivity(intent);
-        });
-        
-        adapter.setOnRemoveClickListener(article -> {
-            savedNewsManager.removeArticle(article);
-            refreshSavedList();
-        });
-        
-        rvSavedArticles.setAdapter(adapter);
+        if (savedArticles == null || savedArticles.isEmpty()) {
+            // Tampilkan Empty State, sembunyikan List
+            rvSavedArticles.setVisibility(View.GONE);
+            cardEmptyState.setVisibility(View.VISIBLE);
+        } else {
+            // Tampilkan List, sembunyikan Empty State
+            rvSavedArticles.setVisibility(View.VISIBLE);
+            cardEmptyState.setVisibility(View.GONE);
+
+            adapter = new SavedNewsAdapter(savedArticles);
+            adapter.setOnItemClickListener(article -> {
+                Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+                intent.putExtra("article", article);
+                startActivity(intent);
+            });
+            
+            adapter.setOnRemoveClickListener(article -> {
+                savedNewsManager.removeArticle(article);
+                refreshSavedList(); // Refresh tampilan setelah dihapus
+            });
+            
+            rvSavedArticles.setAdapter(adapter);
+        }
     }
 }
