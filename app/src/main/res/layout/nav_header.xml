@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="#004371"
+    android:background="?attr/colorPrimaryContainer"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
@@ -12,7 +12,8 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="App Icon"
-        android:src="@drawable/ic_kabarin_logo" />
+        android:src="@drawable/ic_kabarin_logo"
+        android:background="@android:color/transparent" />
 
     <TextView
         android:layout_width="match_parent"
@@ -21,11 +22,13 @@
         android:text="Kabarin"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="?attr/colorPrimary" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stay Updated, Stay Informed" />
+        android:text="Stay Updated, Stay Informed"
+        android:textColor="?attr/colorOnSurfaceVariant" />
 
 </LinearLayout>

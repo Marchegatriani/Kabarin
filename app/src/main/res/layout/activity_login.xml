@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_splash_gradient"
+    android:background="?android:attr/windowBackground"
     android:fillViewport="true"
     tools:context="activity.LoginActivity">
 
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Kabarin"
-            android:textColor="#004371"
+            android:textColor="?attr/colorPrimary"
             android:textSize="26sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="The premium Indonesian news experience."
-            android:textColor="#727780"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="13sp"
             android:gravity="center"
             android:fontFamily="sans-serif" />
@@ -51,7 +51,7 @@
             android:layout_marginTop="24dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Welcome Back !"
-                    android:textColor="#0A1D2D"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium" />
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Please enter your details to continue reading."
-                    android:textColor="#727780"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif" />
 
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Email Address"
-                    android:textColor="#41474F"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif-medium" />
 
@@ -94,17 +94,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    app:boxBackgroundColor="#F0F6FF"
+                    app:boxBackgroundColor="?attr/colorSurface"
                     app:boxBackgroundMode="filled"
                     app:boxCornerRadiusTopStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusBottomEnd="10dp"
-                    app:boxStrokeColor="#D0E4F7"
+                    app:boxStrokeColor="?attr/colorPrimary"
                     app:boxStrokeWidth="1dp"
                     app:hintEnabled="false"
                     app:startIconDrawable="@android:drawable/ic_dialog_email"
-                    app:startIconTint="#727780"
+                    app:startIconTint="?attr/colorOnSurfaceVariant"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -112,8 +112,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:hint="name@example.com"
-                        android:textColorHint="#C1C7D0"
-                        android:textColor="#0A1D2D"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="13sp"
                         android:inputType="textEmailAddress"
                         android:fontFamily="sans-serif" />
@@ -133,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Password"
-                        android:textColor="#41474F"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="13sp"
                         android:fontFamily="sans-serif-medium" />
 
@@ -142,7 +142,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Forgot Password?"
-                        android:textColor="#004371"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="12sp"
                         android:fontFamily="sans-serif" />
 
@@ -152,19 +152,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    app:boxBackgroundColor="#F0F6FF"
+                    app:boxBackgroundColor="?attr/colorSurface"
                     app:boxBackgroundMode="filled"
                     app:boxCornerRadiusTopStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusBottomEnd="10dp"
-                    app:boxStrokeColor="#D0E4F7"
+                    app:boxStrokeColor="?attr/colorPrimary"
                     app:boxStrokeWidth="1dp"
                     app:hintEnabled="false"
                     app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-                    app:startIconTint="#727780"
+                    app:startIconTint="?attr/colorOnSurfaceVariant"
                     app:endIconMode="password_toggle"
-                    app:endIconTint="#727780"
+                    app:endIconTint="?attr/colorOnSurfaceVariant"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -172,8 +172,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:hint="··········"
-                        android:textColorHint="#C1C7D0"
-                        android:textColor="#0A1D2D"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="13sp"
                         android:inputType="textPassword"
                         android:fontFamily="sans-serif" />
@@ -187,11 +187,11 @@
                     android:layout_height="52dp"
                     android:layout_marginTop="24dp"
                     android:text="Login →"
-                    android:textColor="#004371"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
-                    android:backgroundTint="#EDF4FF"
+                    android:backgroundTint="?attr/colorPrimary"
                     android:stateListAnimator="@null"
                     app:cornerRadius="14dp" />
 
@@ -203,7 +203,7 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="Don\'t have an account? Sign up here!"
-                    android:textColor="#004371"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="13sp"
                     android:fontFamily="sans-serif" />
 
@@ -217,7 +217,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="By logging in, you agree to Kabarin\'s Terms of\nService and Privacy Policy"
-            android:textColor="#99727780"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp"
             android:lineSpacingExtra="2dp"
             android:fontFamily="sans-serif" />

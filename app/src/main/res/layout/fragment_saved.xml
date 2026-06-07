@@ -5,62 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
-
-    <!-- ===== TOP APP BAR (Pinned) ===== -->
-    <LinearLayout
-        android:id="@+id/layoutHeader"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:background="#FFFFFF"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/btnMenu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:text="≡"
-            android:textSize="28sp"
-            android:textColor="#0D1B2A"
-            android:gravity="center"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true" />
-
-        <TextView
-            android:id="@+id/tvLogo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Saved"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#0D1B2A"
-            android:layout_marginStart="8dp" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/ic_profile"
-            android:scaleType="centerCrop"
-            android:background="@android:color/darker_gray"
-            app:strokeColor="#E8ECF0"
-            app:strokeWidth="1dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent" />
-
-    </LinearLayout>
+    android:background="?android:attr/windowBackground">
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E8ECF0"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
+        android:background="?attr/colorOutline"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- ===== LIST RECYCLER VIEW ===== -->
     <androidx.recyclerview.widget.RecyclerView
@@ -85,8 +37,8 @@
         android:layout_marginEnd="24dp"
         app:cardCornerRadius="24dp"
         app:cardElevation="6dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -94,57 +46,59 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:padding="36dp">
 
             <FrameLayout
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginBottom="22dp">
+
                 <View
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:background="@drawable/badge_category"
-                    android:backgroundTint="#F0F4FF" />
+                    android:backgroundTint="?attr/colorPrimaryContainer" />
+
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_save"
-                    app:tint="#004371" />
+                    app:tint="?attr/colorPrimary" />
             </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="No Saved Articles Yet"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#0D1B2A"
-                android:layout_marginBottom="10dp" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save articles to read later by tapping the bookmark icon on any news story."
-                android:textSize="14sp"
-                android:textColor="#5A6878"
+                android:layout_marginBottom="26dp"
                 android:gravity="center"
                 android:lineSpacingMultiplier="1.2"
-                android:layout_marginBottom="26dp" />
+                android:text="Save articles to read later by tapping the bookmark icon on any news story."
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnExploreNews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
                 android:text="Explore News"
                 android:textAllCaps="false"
-                android:backgroundTint="#004371"
-                android:textColor="#FFFFFF"
-                app:cornerRadius="12dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp" />
+                android:textColor="?attr/colorOnPrimary"
+                app:cornerRadius="12dp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA">
+    android:background="?android:attr/windowBackground">
 
     <!-- Header Search -->
     <LinearLayout
         android:id="@+id/layoutSearchHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="?attr/colorSurface"
         android:elevation="4dp"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,7 +31,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_revert"
-                app:tint="#0D1B2A"
+                app:tint="?attr/colorOnSurface"
                 android:contentDescription="Back" />
 
             <androidx.appcompat.widget.SearchView
@@ -47,7 +47,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#E8ECF0" />
+            android:background="?attr/colorOutline" />
     </LinearLayout>
 
     <!-- Hasil Pencarian -->
@@ -94,7 +94,7 @@
             android:alpha="0.4"
             android:src="@android:drawable/ic_menu_search"
             android:contentDescription="Search Icon"
-            app:tint="#A0A8B0" />
+            app:tint="?attr/colorOnSurfaceVariant" />
 
         <TextView
             android:id="@+id/tvSearchStatus"
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Mulai cari berita favoritmu"
-            android:textColor="#A0A8B0"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="16sp"
             android:textStyle="bold"
             android:gravity="center" />
@@ -115,7 +115,8 @@
             android:text="Coba Lagi"
             android:visibility="gone"
             app:cornerRadius="12dp"
-            android:backgroundTint="#1565C0" />
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

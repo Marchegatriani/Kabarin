@@ -4,21 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="?android:attr/windowBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
+        android:theme="@style/Theme.Kabarin.AppBarOverlay">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#FFFFFF"
+            android:background="?attr/colorSurface"
             app:navigationIcon="@android:drawable/ic_menu_revert"
+            app:navigationIconTint="?attr/colorOnSurface"
             app:title="News Detail"
-            app:titleTextColor="#0D1B2A" />
+            app:titleTextColor="?attr/colorOnSurface" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +40,7 @@
                 android:layout_height="220dp"
                 android:scaleType="centerCrop"
                 android:layout_marginBottom="16dp"
-                android:background="#EEEEEE" />
+                android:background="?attr/colorSurfaceVariant" />
 
             <TextView
                 android:id="@+id/tvDetailTitle"
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="#0D1B2A"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="8dp" />
 
             <TextView
@@ -55,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="#7A8A9B"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -64,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:lineSpacingMultiplier="1.5"
-                android:textColor="#0D1B2A"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="24dp" />
 
             <Button
@@ -72,6 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Read Full Article in Browser"
+                android:textColor="?attr/colorPrimary"
+                app:strokeColor="?attr/colorPrimary"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
         </LinearLayout>
@@ -84,7 +87,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@android:drawable/btn_star_big_off"
-        app:tint="#FFFFFF"
-        app:backgroundTint="#1565C0" />
+        app:tint="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorPrimary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

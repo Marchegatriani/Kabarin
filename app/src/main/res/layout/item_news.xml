@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    item_news.xml  →  digunakan sebagai item_latest_news.xml
-    Tampilan: card putih, gambar penuh di atas, badge + judul + deskripsi di bawah
--->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,13 +7,13 @@
     android:layout_marginBottom="16dp"
     app:cardCornerRadius="14dp"
     app:cardElevation="3dp"
+    app:cardBackgroundColor="?attr/colorSurface"
     app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#FFFFFF">
+        android:orientation="vertical">
 
         <!-- ── Gambar Berita ── -->
         <ImageView
@@ -66,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:text="6 min read"
                     android:textSize="12sp"
-                    android:textColor="#7A8A9B"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginStart="10dp" />
 
                 <View
@@ -82,7 +78,7 @@
                     android:padding="4dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Save news"
-                    app:tint="#A0A8B0" />
+                    app:tint="?attr/colorOnSurfaceVariant" />
 
             </LinearLayout>
 
@@ -94,7 +90,7 @@
                 android:text="News Title Goes Here"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#0D1B2A"
+                android:textColor="?attr/colorOnSurface"
                 android:maxLines="3"
                 android:ellipsize="end"
                 android:lineSpacingMultiplier="1.25"
@@ -107,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="Short description of the article goes here..."
                 android:textSize="13sp"
-                android:textColor="#5A6878"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:lineSpacingMultiplier="1.4" />

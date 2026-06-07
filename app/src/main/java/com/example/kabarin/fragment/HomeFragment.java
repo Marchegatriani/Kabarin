@@ -29,11 +29,13 @@ import com.example.kabarin.model.Article;
 import com.example.kabarin.model.NewsResponse;
 import com.example.kabarin.utils.Constants;
 import com.example.kabarin.utils.NetworkUtils;
+import com.example.kabarin.utils.SavedNewsManager;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,6 +58,7 @@ public class HomeFragment extends Fragment {
     // Tambahan untuk Offline Mode
     private DatabaseHelper dbHelper;
     private ExecutorService executorService;
+    private SavedNewsManager savedNewsManager;
 
     public HomeFragment() {}
 
@@ -72,14 +75,15 @@ public class HomeFragment extends Fragment {
         prefs = requireActivity().getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
         dbHelper = new DatabaseHelper(getContext());
         executorService = Executors.newSingleThreadExecutor();
+        savedNewsManager = new SavedNewsManager(requireContext());
 
         rvTrending        = view.findViewById(R.id.rvTrending);
         rvLatestNews      = view.findViewById(R.id.rvLatestNews);
         chipGroupCategories = view.findViewById(R.id.chipGroupCategories);
         swipeRefresh      = view.findViewById(R.id.swipeRefresh);
         fabSearch         = view.findViewById(R.id.fab);
-        tvHomeUserName    = view.findViewById(R.id.tvHomeUserName);
         ivHomeProfile     = view.findViewById(R.id.ivHomeProfile);
+        tvHomeUserName    = view.findViewById(R.id.tvHomeUserName);
         tvNetworkStatus   = view.findViewById(R.id.tvNetworkStatus);
 
         rvTrending.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -132,6 +136,7 @@ public class HomeFragment extends Fragment {
             tvNetworkStatus.setText("Berita terbaru");
             tvNetworkStatus.setBackgroundColor(getResources().getColor(R.color.selector_chip_bg, null));
             tvNetworkStatus.setTextColor(android.graphics.Color.WHITE);
+            rvTrending.setVisibility(View.VISIBLE);
             fetchNews(currentCategory, true);   
             fetchNews(currentCategory, false);  
         } else {
@@ -140,7 +145,6 @@ public class HomeFragment extends Fragment {
             tvNetworkStatus.setBackgroundColor(android.graphics.Color.LTGRAY);
             tvNetworkStatus.setTextColor(android.graphics.Color.DKGRAY);
             loadOfflineData();
-            Toast.makeText(getContext(), "Tidak ada internet. Memuat dari cache.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -183,6 +187,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateCache(List<Article> articles) {
+        if (articles == null || articles.isEmpty()) return;
         executorService.execute(() -> {
             dbHelper.clearCache();
             dbHelper.saveArticles(articles);
@@ -191,15 +196,27 @@ public class HomeFragment extends Fragment {
 
     private void loadOfflineData() {
         executorService.execute(() -> {
+            // 1. Ambil dari Cache
             List<Article> cached = dbHelper.getCachedArticles();
+            
+            // 2. Ambil dari Saved News sebagai cadangan
+            List<Article> saved = savedNewsManager.getSavedArticles();
+            
+            // Gabungkan jika cache kosong (biar Bambang gak liat layar kosong)
+            List<Article> displayList = new ArrayList<>(cached);
+            if (displayList.isEmpty() && !saved.isEmpty()) {
+                displayList.addAll(saved);
+            }
+
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     swipeRefresh.setRefreshing(false);
-                    if (!cached.isEmpty()) {
-                        rvLatestNews.setAdapter(createAdapter(cached, "Offline", NewsAdapter.TYPE_LATEST));
-                        rvTrending.setVisibility(View.GONE); // Sembunyikan trending di mode offline
+                    if (!displayList.isEmpty()) {
+                        rvLatestNews.setVisibility(View.VISIBLE);
+                        rvLatestNews.setAdapter(createAdapter(displayList, "Offline", NewsAdapter.TYPE_LATEST));
+                        rvTrending.setVisibility(View.GONE); 
                     } else {
-                        Toast.makeText(getContext(), "Cache kosong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Belum ada berita tersimpan/cache", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

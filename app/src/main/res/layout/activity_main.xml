@@ -12,9 +12,9 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F7FA">
+        android:background="?android:attr/windowBackground">
 
-        <!-- Toolbar untuk Hamburger Menu -->
+        <!-- Toolbar Tunggal (Header Utama) -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,10 +25,26 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#FFFFFF"
+                android:background="?attr/colorSurface"
                 app:title="Kabarin"
-                app:titleTextColor="#0D1B2A"
-                app:popupTheme="@style/Theme.Kabarin.PopupOverlay" />
+                app:titleTextColor="?attr/colorOnSurface"
+                app:popupTheme="@style/Theme.Kabarin.PopupOverlay">
+
+                <!-- Icon Profile di Kanan Atas -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivToolbarProfile"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_profile"
+                    android:scaleType="centerCrop"
+                    android:background="@android:color/darker_gray"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="1dp" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -49,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_gravity="bottom"
-            android:background="#FFFFFF"
+            android:background="?attr/colorSurface"
             app:itemIconTint="@color/selector_bottom_nav"
             app:itemTextColor="@color/selector_bottom_nav"
             app:labelVisibilityMode="labeled"
@@ -66,6 +82,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu" />
+        app:menu="@menu/drawer_menu"
+        android:background="?attr/colorSurface"
+        app:itemTextColor="?attr/colorOnSurface"
+        app:itemIconTint="?attr/colorOnSurface" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

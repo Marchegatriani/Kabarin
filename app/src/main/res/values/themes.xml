@@ -1,13 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Kabarin" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#1565C0</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#D0E4F7</item>
+
+        <item name="android:windowBackground">#F5F7FA</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#0D1B2A</item>
+        <item name="colorOnSurfaceVariant">#5A6878</item>
+        <item name="colorOutline">#E8ECF0</item>
     </style>
 
     <style name="Theme.Kabarin" parent="Base.Theme.Kabarin" />
 
-    <!-- Style untuk Image Bulat Sempurna -->
+    <style name="Theme.Kabarin.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Kabarin.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="ShapeAppearance.Kabarin.Circle" parent="">
         <item name="cornerSize">50%</item>
     </style>

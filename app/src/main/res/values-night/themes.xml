@@ -1,7 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for Night mode. -->
     <style name="Base.Theme.Kabarin" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#D0E4F7</item>
+        <item name="colorOnPrimary">#003355</item>
+        <item name="colorPrimaryContainer">#004371</item>
+
+        <item name="android:windowBackground">#1A1C1E</item>
+        <item name="colorSurface">#1A1C1E</item>
+        <item name="colorOnSurface">#E2E2E6</item>
+        <item name="colorOnSurfaceVariant">#C2C7CF</item>
+        <item name="colorOutline">#41474D</item>
     </style>
 </resources>
