@@ -3,25 +3,22 @@ package com.example.kabarin.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
 import com.example.kabarin.R;
 import com.example.kabarin.activity.NewsDetailActivity;
-import com.example.kabarin.activity.SearchActivity;
 import com.example.kabarin.adapter.NewsAdapter;
 import com.example.kabarin.api.RetrofitClient;
 import com.example.kabarin.local.DatabaseHelper;
@@ -33,7 +30,6 @@ import com.example.kabarin.utils.SavedNewsManager;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +46,7 @@ public class HomeFragment extends Fragment {
     private ChipGroup chipGroupCategories;
     private SwipeRefreshLayout swipeRefresh;
     private FloatingActionButton fabSearch;
-    private TextView tvHomeUserName, tvNetworkStatus;
-    private ShapeableImageView ivHomeProfile;
     private String currentCategory = "general";
-    private SharedPreferences prefs;
 
     // Tambahan untuk Offline Mode
     private DatabaseHelper dbHelper;
@@ -72,7 +65,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        prefs = requireActivity().getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
         dbHelper = new DatabaseHelper(getContext());
         executorService = Executors.newSingleThreadExecutor();
         savedNewsManager = new SavedNewsManager(requireContext());
@@ -82,9 +74,6 @@ public class HomeFragment extends Fragment {
         chipGroupCategories = view.findViewById(R.id.chipGroupCategories);
         swipeRefresh      = view.findViewById(R.id.swipeRefresh);
         fabSearch         = view.findViewById(R.id.fab);
-        ivHomeProfile     = view.findViewById(R.id.ivHomeProfile);
-        tvHomeUserName    = view.findViewById(R.id.tvHomeUserName);
-        tvNetworkStatus   = view.findViewById(R.id.tvNetworkStatus);
 
         rvTrending.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvLatestNews.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -101,31 +90,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        loadUserProfile();
-        refreshData();
-
         swipeRefresh.setColorSchemeResources(R.color.selector_chip_bg);
         swipeRefresh.setOnRefreshListener(this::refreshData);
 
         fabSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), SearchActivity.class);
-            startActivity(intent);
+            Navigation.findNavController(v).navigate(R.id.action_nav_home_to_nav_search);
         });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadUserProfile();
-    }
-
-    private void loadUserProfile() {
-        String name = prefs.getString("userName", "Pengguna");
-        String photoUri = prefs.getString("profileUri", null);
-        tvHomeUserName.setText(name.isEmpty() ? "Pengguna" : name);
-        if (photoUri != null) {
-            Glide.with(this).load(Uri.parse(photoUri)).placeholder(R.drawable.ic_profile).into(ivHomeProfile);
-        }
+        // Load data awal
+        refreshData();
     }
 
     private void refreshData() {
@@ -133,17 +106,11 @@ public class HomeFragment extends Fragment {
 
         if (NetworkUtils.isNetworkConnected(requireContext())) {
             // MODE ONLINE
-            tvNetworkStatus.setText("Berita terbaru");
-            tvNetworkStatus.setBackgroundColor(getResources().getColor(R.color.selector_chip_bg, null));
-            tvNetworkStatus.setTextColor(android.graphics.Color.WHITE);
             rvTrending.setVisibility(View.VISIBLE);
             fetchNews(currentCategory, true);   
             fetchNews(currentCategory, false);  
         } else {
             // MODE OFFLINE
-            tvNetworkStatus.setText("Menampilkan berita offline");
-            tvNetworkStatus.setBackgroundColor(android.graphics.Color.LTGRAY);
-            tvNetworkStatus.setTextColor(android.graphics.Color.DKGRAY);
             loadOfflineData();
         }
     }
@@ -155,7 +122,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
                         if (!isAdded()) return;
-                        swipeRefresh.setRefreshing(false);
+                        if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
 
                         if (response.isSuccessful() && response.body() != null) {
                             List<Article> articles = response.body().getArticles();
@@ -165,7 +132,6 @@ public class HomeFragment extends Fragment {
                                     rvTrending.setAdapter(createAdapter(trending, categoryToFetch, NewsAdapter.TYPE_TRENDING));
                                 } else {
                                     rvLatestNews.setAdapter(createAdapter(articles, categoryToFetch, NewsAdapter.TYPE_LATEST));
-                                    // Update Cache hanya untuk Latest News
                                     updateCache(articles);
                                 }
                             }
@@ -175,7 +141,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
                         if (!isAdded()) return;
-                        swipeRefresh.setRefreshing(false);
+                        if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                     }
                 });
     }
@@ -196,13 +162,9 @@ public class HomeFragment extends Fragment {
 
     private void loadOfflineData() {
         executorService.execute(() -> {
-            // 1. Ambil dari Cache
             List<Article> cached = dbHelper.getCachedArticles();
-            
-            // 2. Ambil dari Saved News sebagai cadangan
             List<Article> saved = savedNewsManager.getSavedArticles();
             
-            // Gabungkan jika cache kosong (biar Bambang gak liat layar kosong)
             List<Article> displayList = new ArrayList<>(cached);
             if (displayList.isEmpty() && !saved.isEmpty()) {
                 displayList.addAll(saved);
@@ -210,13 +172,13 @@ public class HomeFragment extends Fragment {
 
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    swipeRefresh.setRefreshing(false);
+                    if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                     if (!displayList.isEmpty()) {
                         rvLatestNews.setVisibility(View.VISIBLE);
                         rvLatestNews.setAdapter(createAdapter(displayList, "Offline", NewsAdapter.TYPE_LATEST));
                         rvTrending.setVisibility(View.GONE); 
                     } else {
-                        Toast.makeText(getContext(), "Belum ada berita tersimpan/cache", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Belum ada berita tersimpan", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

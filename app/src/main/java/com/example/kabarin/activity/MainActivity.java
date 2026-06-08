@@ -44,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
 
         // Konfigurasi AppBar (Hamburger menu muncul di fragment top-level)
+        // R.id.nav_settings dihapus karena fiturnya sudah pindah ke Profile
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_saved, R.id.nav_profile, R.id.nav_settings)
+                R.id.nav_home, R.id.nav_saved, R.id.nav_profile)
                 .setOpenableLayout(drawer)
                 .build();
 

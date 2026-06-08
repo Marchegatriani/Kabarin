@@ -52,6 +52,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="Kabarin Icon"
+            android:src="@drawable/ic_kabarin_logo"
+            app:tint="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Kabarin"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <!-- Headline — center -->
@@ -160,7 +177,7 @@
                     android:id="@+id/chipPolitics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Politics"
+                    android:text="Health"
                     android:textColor="#004371"
                     android:textSize="12sp"
                     app:chipBackgroundColor="#3377BBFD"
@@ -199,25 +216,5 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-    <ImageView
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:contentDescription="Kabarin Icon"
-        android:src="@drawable/ic_kabarin_logo"
-        app:tint="#FFFFFF"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="98dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="Kabarin"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:layout_editor_absoluteX="183dp"
-        tools:layout_editor_absoluteY="98dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

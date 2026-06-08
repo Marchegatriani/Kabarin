@@ -23,61 +23,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- NETWORK STATUS BAR -->
-                <TextView
-                    android:id="@+id/tvNetworkStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    android:text="Berita terbaru"
-                    android:background="@color/selector_chip_bg"
-                    android:textColor="@android:color/white" />
-
-                <!-- HEADER / WELCOME SECTION -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/ivHomeProfile"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_profile"
-                        android:scaleType="centerCrop"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
-                        app:strokeColor="?attr/colorOutline"
-                        app:strokeWidth="1dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_toStartOf="@id/ivHomeProfile"
-                        android:layout_marginEnd="16dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Welcome back,"
-                            android:textSize="14sp"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
-
-                        <TextView
-                            android:id="@+id/tvHomeUserName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pengguna"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
-                    </LinearLayout>
-                </RelativeLayout>
-
                 <!-- CATEGORY CHIPS -->
                 <HorizontalScrollView
                     android:layout_width="match_parent"

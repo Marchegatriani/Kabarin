@@ -1,22 +1,27 @@
-package com.example.kabarin.activity;
+package com.example.kabarin.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kabarin.R;
+import com.example.kabarin.activity.NewsDetailActivity;
 import com.example.kabarin.adapter.NewsAdapter;
 import com.example.kabarin.api.RetrofitClient;
 import com.example.kabarin.model.Article;
@@ -29,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchFragment extends Fragment {
 
     private ImageButton btnBack;
     private SearchView searchView;
@@ -41,24 +46,29 @@ public class SearchActivity extends AppCompatActivity {
     private Button btnRetry;
     private String lastQuery = "";
 
+    public SearchFragment() {}
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
+    }
 
-        // Initialize Views dengan ID yang benar sesuai activity_search.xml
-        btnBack = findViewById(R.id.btnBack);
-        searchView = findViewById(R.id.searchView);
-        rvSearchResult = findViewById(R.id.rvSearchResult);
-        progressBar = findViewById(R.id.progressBar);
-        layoutSearchStatus = findViewById(R.id.layoutSearchStatus);
-        ivSearchStatus = findViewById(R.id.ivSearchStatus);
-        tvSearchStatus = findViewById(R.id.tvSearchStatus);
-        btnRetry = findViewById(R.id.btnRetry);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        rvSearchResult.setLayoutManager(new LinearLayoutManager(this));
+        searchView = view.findViewById(R.id.searchView);
+        rvSearchResult = view.findViewById(R.id.rvSearchResult);
+        progressBar = view.findViewById(R.id.progressBar);
+        layoutSearchStatus = view.findViewById(R.id.layoutSearchStatus);
+        ivSearchStatus = view.findViewById(R.id.ivSearchStatus);
+        tvSearchStatus = view.findViewById(R.id.tvSearchStatus);
+        btnRetry = view.findViewById(R.id.btnRetry);
 
-        btnBack.setOnClickListener(v -> finish());
+        rvSearchResult.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        btnBack.setOnClickListener(v -> Navigation.findNavController(view).navigateUp());
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -82,6 +92,9 @@ public class SearchActivity extends AppCompatActivity {
                 performSearch(lastQuery);
             }
         });
+
+        // Request focus on search view when fragment starts
+        searchView.requestFocus();
     }
 
     private void performSearch(String query) {
@@ -94,6 +107,7 @@ public class SearchActivity extends AppCompatActivity {
                 .enqueue(new Callback<NewsResponse>() {
                     @Override
                     public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
+                        if (!isAdded()) return;
                         progressBar.setVisibility(View.GONE);
                         if (response.isSuccessful() && response.body() != null) {
                             List<Article> articles = response.body().getArticles();
@@ -109,6 +123,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
+                        if (!isAdded()) return;
                         progressBar.setVisibility(View.GONE);
                         showErrorState("Masalah koneksi. Periksa internet Anda.");
                     }
@@ -121,7 +136,7 @@ public class SearchActivity extends AppCompatActivity {
 
         NewsAdapter adapter = new NewsAdapter(articles, NewsAdapter.TYPE_LATEST, "Search Result");
         adapter.setOnItemClickListener(article -> {
-            Intent intent = new Intent(SearchActivity.this, NewsDetailActivity.class);
+            Intent intent = new Intent(getContext(), NewsDetailActivity.class);
             intent.putExtra("article", article);
             startActivity(intent);
         });

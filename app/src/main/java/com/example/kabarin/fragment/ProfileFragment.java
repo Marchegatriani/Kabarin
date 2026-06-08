@@ -1,75 +1,33 @@
 package com.example.kabarin.fragment;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.kabarin.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class ProfileFragment extends Fragment {
 
     private ShapeableImageView ivProfilePhoto;
-    private TextInputEditText etFullName, etBio, etLocation;
-    private TextInputLayout tlLocation;
-    private TextView tvSave;
+    private TextView tvUserName, tvMemberBadge, tvUserBio;
+    private SwitchMaterial switchDarkMode;
     private SharedPreferences prefs;
-    private FusedLocationProviderClient fusedLocationClient;
-
-    // Launcher untuk Galeri
-    private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                if (uri != null) {
-                    // Berikan izin permanen untuk URI jika perlu, atau cukup tampilkan
-                    saveImageUri(uri);
-                    loadProfileImage(uri.toString());
-                }
-            });
-
-    // Launcher untuk Permission Lokasi
-    private final ActivityResultLauncher<String[]> locationPermissionRequest =
-            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-                Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
-                Boolean coarseLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false);
-                if (fineLocationGranted != null && fineLocationGranted) {
-                    getCurrentLocation();
-                } else if (coarseLocationGranted != null && coarseLocationGranted) {
-                    getCurrentLocation();
-                } else {
-                    Toast.makeText(getContext(), "Izin lokasi ditolak", Toast.LENGTH_SHORT).show();
-                }
-            });
 
     public ProfileFragment() {}
 
@@ -83,87 +41,53 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         prefs = requireActivity().getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         ivProfilePhoto = view.findViewById(R.id.ivProfilePhoto);
-        etFullName = view.findViewById(R.id.etFullName);
-        etBio = view.findViewById(R.id.etBio);
-        etLocation = view.findViewById(R.id.etLocation);
-        tlLocation = view.findViewById(R.id.tlLocation);
-        tvSave = view.findViewById(R.id.tvSave);
+        tvUserName = view.findViewById(R.id.tvUserName);
+        tvMemberBadge = view.findViewById(R.id.tvMemberBadge);
+        tvUserBio = view.findViewById(R.id.tvUserBio);
+        switchDarkMode = view.findViewById(R.id.switchDarkMode);
 
-        // Load data tersimpan
-        etFullName.setText(prefs.getString("userName", ""));
-        etBio.setText(prefs.getString("userBio", ""));
-        etLocation.setText(prefs.getString("userLocation", ""));
-        loadProfileImage(prefs.getString("profileUri", null));
+        updateUI();
 
-        // Event Klik Foto Profil
-        ivProfilePhoto.setOnClickListener(v -> pickMedia.launch(new PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                .build()));
+        // Setup Dark Mode Switch
+        boolean isDarkMode = prefs.getBoolean("isDarkMode", false);
+        switchDarkMode.setChecked(isDarkMode);
+        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("isDarkMode", isChecked).apply();
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
 
-        // Event Klik Ambil Lokasi (Icon di ujung field)
-        tlLocation.setEndIconOnClickListener(v -> checkLocationPermission());
-
-        // Tombol Simpan
-        tvSave.setOnClickListener(v -> {
-            prefs.edit()
-                    .putString("userName", etFullName.getText().toString())
-                    .putString("userBio", etBio.getText().toString())
-                    .putString("userLocation", etLocation.getText().toString())
-                    .apply();
-            Toast.makeText(getContext(), "Profil diperbarui", Toast.LENGTH_SHORT).show();
+        // Klik foto profil (termasuk ikon pensil) untuk Edit Profile
+        view.findViewById(R.id.frameProfilePicture).setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_nav_profile_to_nav_edit_profile);
         });
 
         setupSignOut(view);
     }
 
-    private void loadProfileImage(String uriString) {
-        if (uriString != null) {
-            Glide.with(this).load(Uri.parse(uriString)).into(ivProfilePhoto);
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 
-    private void saveImageUri(Uri uri) {
-        prefs.edit().putString("profileUri", uri.toString()).apply();
-    }
+    private void updateUI() {
+        String name = prefs.getString("userName", "User");
+        String username = prefs.getString("userNickname", "username");
+        String location = prefs.getString("userLocation", "Location");
+        String photoUri = prefs.getString("profileUri", null);
 
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation();
-        } else {
-            locationPermissionRequest.launch(new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            });
-        }
-    }
+        tvUserName.setText(name);
+        tvMemberBadge.setText("@" + username);
+        tvUserBio.setText(location);
 
-    private void getCurrentLocation() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) return;
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
-            if (location != null) {
-                updateLocationField(location);
-            } else {
-                Toast.makeText(getContext(), "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void updateLocationField(Location location) {
-        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                String city = addresses.get(0).getLocality();
-                if (city == null) city = addresses.get(0).getSubAdminArea();
-                etLocation.setText(city);
-                prefs.edit().putString("userLocation", city).apply();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (photoUri != null) {
+            Glide.with(this).load(Uri.parse(photoUri)).placeholder(R.drawable.ic_profile).into(ivProfilePhoto);
         }
     }
 

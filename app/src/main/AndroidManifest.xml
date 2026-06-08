@@ -35,7 +35,6 @@
         <activity android:name=".activity.MainActivity" android:exported="false" />
         <activity android:name=".activity.NewsDetailActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".activity.NewsWebActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.SearchActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
 </manifest>
