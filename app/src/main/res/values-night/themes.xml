@@ -10,5 +10,11 @@
         <item name="colorOnSurface">#E2E2E6</item>
         <item name="colorOnSurfaceVariant">#C2C7CF</item>
         <item name="colorOutline">#41474D</item>
+
+        <!-- Memastikan ikon (seperti hamburger) berwarna terang di mode malam -->
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
     </style>
+
+    <!-- Overlay Toolbar untuk mode malam -->
+    <style name="Theme.Kabarin.AppBarOverlay" parent="ThemeOverlay.Material3.ActionBar" />
 </resources>

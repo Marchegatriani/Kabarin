@@ -56,8 +56,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:contentDescription="Kabarin Icon"
-            android:src="@drawable/ic_kabarin_logo"
-            app:tint="#FFFFFF" />
+            android:src="@drawable/ic_kabarin_logo" />
 
         <TextView
             android:layout_width="wrap_content"

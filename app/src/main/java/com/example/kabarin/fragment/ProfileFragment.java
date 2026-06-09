@@ -1,13 +1,13 @@
 package com.example.kabarin.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.kabarin.R;
+import com.example.kabarin.activity.WelcomeActivity;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -97,7 +98,13 @@ public class ProfileFragment extends Fragment {
                 .setTitle("Logout")
                 .setMessage("Yakin ingin keluar?")
                 .setPositiveButton("Ya", (d, w) -> {
+                    // Update status login di SharedPreferences
                     prefs.edit().putBoolean("isLogin", false).apply();
+                    
+                    // Navigasi ke WelcomeActivity dan hapus tumpukan activity (Backstack)
+                    Intent intent = new Intent(requireContext(), WelcomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     requireActivity().finish();
                 })
                 .setNegativeButton("Tidak", null)

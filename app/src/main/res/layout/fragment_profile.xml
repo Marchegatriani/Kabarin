@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimaryContainer"
+    android:background="?android:attr/windowBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -333,7 +333,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="v2.4.0 • Terms &amp; Privacy"
+                            android:text="v1.0.0 • Terms &amp; Privacy"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
 

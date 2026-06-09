@@ -43,8 +43,7 @@
                     android:id="@+id/imgKabarinLogo"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_kabarin_logo"
-                    app:tint="?attr/colorPrimary" />
+                    android:src="@drawable/ic_kabarin_logo" />
 
             </LinearLayout>
 

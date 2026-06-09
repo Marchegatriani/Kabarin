@@ -16,6 +16,7 @@
 
         <!-- Toolbar Tunggal (Header Utama) -->
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.Kabarin.AppBarOverlay"

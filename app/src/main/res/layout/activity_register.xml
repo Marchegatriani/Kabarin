@@ -19,9 +19,6 @@
         android:paddingTop="48dp"
         android:paddingBottom="32dp">
 
-        <!-- =============================================
-             TOP — Logo + Tagline (center)
-             ============================================= -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Elevating the Indonesian news\nexperience with clarity and\nintelligence."
+            android:text="Elevating the International news\nexperience with clarity and\nintelligence."
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="13sp"
             android:gravity="center"
@@ -112,7 +109,7 @@
                         android:id="@+id/etFullName"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:hint="Aditya Pratama"
+                        android:hint="Marche Gatriani"
                         android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="13sp"
@@ -152,7 +149,7 @@
                         android:id="@+id/etEmail"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:hint="aditya@kabarin.id"
+                        android:hint="marcss@kabarin.id"
                         android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="13sp"

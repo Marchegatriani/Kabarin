@@ -2,6 +2,7 @@ package com.example.kabarin.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         article = (Article) getIntent().getSerializableExtra("article");
         if (article == null) {
+            Toast.makeText(this, "Data berita tidak ditemukan", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -56,25 +58,39 @@ public class NewsDetailActivity extends AppCompatActivity {
         displayArticle();
         setupSaveButton();
 
-        // MENGGUNAKAN WEBVIEW INTERNAL (NewsWebActivity) agar tidak keluar aplikasi
         btnReadMore.setOnClickListener(v -> {
-            Intent intent = new Intent(NewsDetailActivity.this, NewsWebActivity.class);
-            intent.putExtra("url", article.getUrl());
-            startActivity(intent);
+            try {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl()));
+                startActivity(browserIntent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Tidak dapat membuka browser", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     private void displayArticle() {
         tvDetailTitle.setText(article.getTitle());
-        String author = (article.getAuthor() != null) ? article.getAuthor() : "Unknown Source";
-        tvDetailAuthorTime.setText("By " + author + " • " + article.getPublishedAt());
-        tvDetailContent.setText(article.getContent() != null ? article.getContent() : article.getDescription());
+        
+        String author = (article.getAuthor() != null && !article.getAuthor().isEmpty()) 
+                ? article.getAuthor() : "Unknown Source";
+        String date = (article.getPublishedAt() != null) ? article.getPublishedAt() : "";
+        
+        tvDetailAuthorTime.setText("By " + author + (date.isEmpty() ? "" : " • " + date));
+        
+        // Pengecekan isi konten
+        String content = article.getContent();
+        if (content == null || content.isEmpty()) {
+            content = article.getDescription();
+        }
+        tvDetailContent.setText(content != null ? content : "No content available.");
 
-        Glide.with(this)
-                .load(article.getUrlToImage())
-                .placeholder(R.color.selector_chip_bg)
-                .error(R.color.selector_chip_bg)
-                .into(ivDetailImage);
+        if (!isFinishing()) {
+            Glide.with(this)
+                    .load(article.getUrlToImage())
+                    .placeholder(R.drawable.ic_kabarin_logo)
+                    .error(R.drawable.ic_kabarin_logo)
+                    .into(ivDetailImage);
+        }
     }
 
     private void setupSaveButton() {
@@ -92,12 +108,11 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
     private void updateFabIcon() {
-        // Gunakan ic_save sesuai permintaan
         fabSave.setImageResource(R.drawable.ic_save);
         if (savedNewsManager.isSaved(article)) {
-            fabSave.setColorFilter(Color.YELLOW); // Kuning jika tersimpan
+            fabSave.setColorFilter(Color.YELLOW);
         } else {
-            fabSave.setColorFilter(Color.WHITE);  // Putih jika belum
+            fabSave.setColorFilter(Color.WHITE);
         }
     }
 }

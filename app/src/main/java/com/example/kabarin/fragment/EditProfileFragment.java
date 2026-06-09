@@ -2,6 +2,7 @@ package com.example.kabarin.fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -55,6 +56,13 @@ public class EditProfileFragment extends Fragment {
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri != null) {
                     selectedImageUri = uri;
+                    // Penting: Ambil hak akses baca persisten untuk URI ini agar bisa dibaca di halaman lain/setelah restart
+                    try {
+                        requireContext().getContentResolver().takePersistableUriPermission(uri,
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
                     Glide.with(this).load(uri).into(ivProfilePhoto);
                 }
             });
@@ -129,7 +137,9 @@ public class EditProfileFragment extends Fragment {
                 editor.putString("profileUri", selectedImageUri.toString());
             }
             
-            editor.apply();
+            // Gunakan commit() alih-alih apply() agar perubahan langsung tersimpan secara sinkron
+            // sebelum kita kembali (navigateUp)
+            editor.commit();
 
             Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).navigateUp();

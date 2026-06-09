@@ -7,13 +7,13 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
 
-    <!-- Header Search -->
+    <!-- Header Search - Sekarang mentok ke atas -->
     <LinearLayout
         android:id="@+id/layoutSearchHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
-        android:elevation="4dp"
+        android:elevation="2dp"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
 

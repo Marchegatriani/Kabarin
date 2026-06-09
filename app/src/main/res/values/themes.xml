@@ -10,12 +10,16 @@
         <item name="colorOnSurface">#0D1B2A</item>
         <item name="colorOnSurfaceVariant">#5A6878</item>
         <item name="colorOutline">#E8ECF0</item>
+
+        <!-- Tambahkan ini untuk mengontrol warna ikon default (hamburger, dll) -->
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
     </style>
 
     <style name="Theme.Kabarin" parent="Base.Theme.Kabarin" />
 
-    <style name="Theme.Kabarin.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="Theme.Kabarin.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!-- Ubah parent agar mendukung DayNight, bukan dipaksa Light -->
+    <style name="Theme.Kabarin.AppBarOverlay" parent="ThemeOverlay.Material3.ActionBar" />
+    <style name="Theme.Kabarin.PopupOverlay" parent="ThemeOverlay.Material3.DynamicColors.DayNight" />
 
     <style name="ShapeAppearance.Kabarin.Circle" parent="">
         <item name="cornerSize">50%</item>

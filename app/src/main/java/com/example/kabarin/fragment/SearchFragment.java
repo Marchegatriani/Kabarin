@@ -1,12 +1,15 @@
 package com.example.kabarin.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +38,6 @@ import retrofit2.Response;
 
 public class SearchFragment extends Fragment {
 
-    private ImageButton btnBack;
     private SearchView searchView;
     private RecyclerView rvSearchResult;
     private ProgressBar progressBar;
@@ -45,6 +46,10 @@ public class SearchFragment extends Fragment {
     private TextView tvSearchStatus;
     private Button btnRetry;
     private String lastQuery = "";
+
+    // Handler untuk debouncing (menunda pencarian saat mengetik)
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
 
     public SearchFragment() {}
 
@@ -68,12 +73,26 @@ public class SearchFragment extends Fragment {
 
         rvSearchResult.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        btnBack.setOnClickListener(v -> Navigation.findNavController(view).navigateUp());
+        // Konfigurasi SearchView agar langsung terbuka dan fokus
+        searchView.setIconified(false);
+        searchView.requestFocus();
+        
+        // Memunculkan keyboard secara otomatis
+        searchView.postDelayed(() -> {
+            if (isAdded() && getContext() != null) {
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(searchView.findFocus(), InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        }, 200);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.trim().isEmpty()) {
+                    // Batalkan pending search jika user tekan enter
+                    searchHandler.removeCallbacks(searchRunnable);
                     lastQuery = query;
                     performSearch(query);
                 }
@@ -83,7 +102,29 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                // Hapus callback yang lama setiap kali user mengetik karakter baru
+                searchHandler.removeCallbacks(searchRunnable);
+
+                if (newText != null && !newText.trim().isEmpty()) {
+                    // Set status loading sementara menunggu debouncing
+                    progressBar.setVisibility(View.VISIBLE);
+                    layoutSearchStatus.setVisibility(View.GONE);
+                    rvSearchResult.setVisibility(View.GONE);
+
+                    // Jalankan pencarian setelah delay 800ms
+                    searchRunnable = () -> {
+                        lastQuery = newText;
+                        performSearch(newText);
+                    };
+                    searchHandler.postDelayed(searchRunnable, 800);
+                } else {
+                    // Jika teks dihapus, sembunyikan loading dan hasil
+                    progressBar.setVisibility(View.GONE);
+                    rvSearchResult.setVisibility(View.GONE);
+                    layoutSearchStatus.setVisibility(View.VISIBLE);
+                    tvSearchStatus.setText("Mulai cari berita favoritmu");
+                }
+                return true;
             }
         });
 
@@ -92,9 +133,6 @@ public class SearchFragment extends Fragment {
                 performSearch(lastQuery);
             }
         });
-
-        // Request focus on search view when fragment starts
-        searchView.requestFocus();
     }
 
     private void performSearch(String query) {
@@ -157,5 +195,12 @@ public class SearchFragment extends Fragment {
         ivSearchStatus.setImageResource(android.R.drawable.stat_notify_error);
         tvSearchStatus.setText(message);
         btnRetry.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Bersihkan handler saat view dihancurkan untuk menghindari memory leak
+        searchHandler.removeCallbacks(searchRunnable);
     }
 }

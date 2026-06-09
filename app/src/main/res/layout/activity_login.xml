@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="The premium Indonesian news experience."
+            android:text="The International news experience."
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="13sp"
             android:gravity="center"
@@ -215,12 +215,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif"
             android:gravity="center"
+            android:lineSpacingExtra="2dp"
             android:text="By logging in, you agree to Kabarin\'s Terms of\nService and Privacy Policy"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="11sp"
-            android:lineSpacingExtra="2dp"
-            android:fontFamily="sans-serif" />
+            android:textSize="11sp" />
 
     </LinearLayout>
 </ScrollView>

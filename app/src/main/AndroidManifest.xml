@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
+        android:name=".KabarinApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -32,9 +33,11 @@
         <activity android:name=".activity.WelcomeActivity" android:exported="false" />
         <activity android:name=".activity.LoginActivity" android:exported="false" />
         <activity android:name=".activity.RegisterActivity" android:exported="false" />
-        <activity android:name=".activity.MainActivity" android:exported="false" />
-        <activity android:name=".activity.NewsDetailActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activity.NewsWebActivity" android:exported="false" android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.NewsDetailActivity" android:exported="false" />
 
     </application>
 </manifest>
