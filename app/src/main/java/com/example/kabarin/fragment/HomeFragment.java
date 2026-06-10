@@ -1,8 +1,6 @@
 package com.example.kabarin.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +46,6 @@ public class HomeFragment extends Fragment {
     private FloatingActionButton fabSearch;
     private String currentCategory = "general";
 
-    // Tambahan untuk Offline Mode
     private DatabaseHelper dbHelper;
     private ExecutorService executorService;
     private SavedNewsManager savedNewsManager;
@@ -56,8 +53,7 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -69,15 +65,22 @@ public class HomeFragment extends Fragment {
         executorService = Executors.newSingleThreadExecutor();
         savedNewsManager = new SavedNewsManager(requireContext());
 
-        rvTrending        = view.findViewById(R.id.rvTrending);
-        rvLatestNews      = view.findViewById(R.id.rvLatestNews);
+        rvTrending = view.findViewById(R.id.rvTrending);
+        rvLatestNews = view.findViewById(R.id.rvLatestNews);
         chipGroupCategories = view.findViewById(R.id.chipGroupCategories);
-        swipeRefresh      = view.findViewById(R.id.swipeRefresh);
-        fabSearch         = view.findViewById(R.id.fab);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
+        fabSearch = view.findViewById(R.id.fab);
 
         rvTrending.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvLatestNews.setLayoutManager(new LinearLayoutManager(getContext()));
         rvLatestNews.setNestedScrollingEnabled(false);
+
+        // FAB Search Click
+        if (fabSearch != null) {
+            fabSearch.setOnClickListener(v -> 
+                Navigation.findNavController(v).navigate(R.id.action_nav_home_to_nav_search)
+            );
+        }
 
         chipGroupCategories.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (!checkedIds.isEmpty()) {
@@ -90,48 +93,35 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        swipeRefresh.setColorSchemeResources(R.color.selector_chip_bg);
         swipeRefresh.setOnRefreshListener(this::refreshData);
-
-        fabSearch.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_nav_home_to_nav_search);
-        });
-
-        // Load data awal
         refreshData();
     }
 
     private void refreshData() {
         if (swipeRefresh != null) swipeRefresh.setRefreshing(true);
-
         if (NetworkUtils.isNetworkConnected(requireContext())) {
-            // MODE ONLINE
-            rvTrending.setVisibility(View.VISIBLE);
-            fetchNews(currentCategory, true);   
-            fetchNews(currentCategory, false);  
+            fetchNews(currentCategory, true);
+            fetchNews(currentCategory, false);
         } else {
-            // MODE OFFLINE
             loadOfflineData();
         }
     }
 
-    private void fetchNews(final String categoryToFetch, boolean isTrending) {
+    private void fetchNews(String category, boolean isTrending) {
         RetrofitClient.getApiService()
-                .getTopHeadlines("us", categoryToFetch, Constants.API_KEY)
+                .getTopHeadlines("us", category, Constants.API_KEY)
                 .enqueue(new Callback<NewsResponse>() {
                     @Override
                     public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
                         if (!isAdded()) return;
                         if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
-
                         if (response.isSuccessful() && response.body() != null) {
                             List<Article> articles = response.body().getArticles();
                             if (articles != null) {
                                 if (isTrending) {
-                                    List<Article> trending = articles.size() > 5 ? articles.subList(0, 5) : articles;
-                                    rvTrending.setAdapter(createAdapter(trending, categoryToFetch, NewsAdapter.TYPE_TRENDING));
+                                    rvTrending.setAdapter(createAdapter(articles.subList(0, Math.min(articles.size(), 5)), category, NewsAdapter.TYPE_TRENDING));
                                 } else {
-                                    rvLatestNews.setAdapter(createAdapter(articles, categoryToFetch, NewsAdapter.TYPE_LATEST));
+                                    rvLatestNews.setAdapter(createAdapter(articles, category, NewsAdapter.TYPE_LATEST));
                                     updateCache(articles);
                                 }
                             }
@@ -140,7 +130,6 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
-                        if (!isAdded()) return;
                         if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
                     }
                 });
@@ -148,12 +137,21 @@ public class HomeFragment extends Fragment {
 
     private NewsAdapter createAdapter(List<Article> list, String cat, int type) {
         NewsAdapter adapter = new NewsAdapter(list, type, cat);
+        adapter.setSavedNewsManager(savedNewsManager);
         adapter.setOnItemClickListener(this::openDetail);
+        adapter.setOnSaveClickListener(article -> {
+            if (savedNewsManager.isSaved(article)) {
+                savedNewsManager.removeArticle(article);
+                Toast.makeText(getContext(), R.string.news_removed, Toast.LENGTH_SHORT).show();
+            } else {
+                savedNewsManager.saveArticle(article);
+                Toast.makeText(getContext(), R.string.news_saved, Toast.LENGTH_SHORT).show();
+            }
+        });
         return adapter;
     }
 
     private void updateCache(List<Article> articles) {
-        if (articles == null || articles.isEmpty()) return;
         executorService.execute(() -> {
             dbHelper.clearCache();
             dbHelper.saveArticles(articles);
@@ -163,23 +161,11 @@ public class HomeFragment extends Fragment {
     private void loadOfflineData() {
         executorService.execute(() -> {
             List<Article> cached = dbHelper.getCachedArticles();
-            List<Article> saved = savedNewsManager.getSavedArticles();
-            
-            List<Article> displayList = new ArrayList<>(cached);
-            if (displayList.isEmpty() && !saved.isEmpty()) {
-                displayList.addAll(saved);
-            }
-
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
-                    if (!displayList.isEmpty()) {
-                        rvLatestNews.setVisibility(View.VISIBLE);
-                        rvLatestNews.setAdapter(createAdapter(displayList, "Offline", NewsAdapter.TYPE_LATEST));
-                        rvTrending.setVisibility(View.GONE); 
-                    } else {
-                        Toast.makeText(getContext(), "Belum ada berita tersimpan", Toast.LENGTH_SHORT).show();
-                    }
+                    rvLatestNews.setAdapter(createAdapter(cached, "Offline", NewsAdapter.TYPE_LATEST));
+                    rvTrending.setVisibility(View.GONE);
                 });
             }
         });
@@ -194,6 +180,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (executorService != null) executorService.shutdown();
+        executorService.shutdown();
     }
 }

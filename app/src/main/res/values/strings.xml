@@ -1,6 +1,90 @@
 <resources>
     <string name="app_name">Kabarin</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="content_description_back">Back</string>
+    <string name="tagline">The International news experience.</string>
+    <string name="tagline_long">Elevating the International news\nexperience with clarity and\nintelligence.</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_headline">Stay Updated, Stay Informed</string>
+    <string name="welcome_desc">Experience journalism redefined. Jakarta\'s most trusted premium news ecosystem, delivered with clarity and intelligence.</string>
+    <string name="get_started">Get Started</string>
+    <string name="explore_categories">EXPLORE CATEGORIES</string>
+
+    <!-- Login Screen -->
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="login_desc">Please enter your details to continue reading.</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login_button">Login →</string>
+    <string name="no_account">Don\'t have an account? Sign up here!</string>
+    <string name="terms_policy">By logging in, you agree to Kabarin\'s Terms of\nService and Privacy Policy</string>
+
+    <!-- Register Screen -->
+    <string name="join_community">Join the community</string>
+    <string name="register_desc">Get personalized news curated for you.</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="agree_terms">I agree to the Terms of Service and Privacy Policy.</string>
+    <string name="create_account">Create Account →</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="back_to_login">⊕ Back to Login</string>
+
+    <!-- Home Screen -->
+    <string name="trending_headlines">Trending Headlines</string>
+    <string name="latest_news">Latest News</string>
+    <string name="category_all">All</string>
+    <string name="category_technology">Technology</string>
+    <string name="category_sports">Sports</string>
+    <string name="category_business">Business</string>
+    <string name="category_health">Health</string>
+    <string name="search_hint">Search news here…</string>
+
+    <!-- Saved Screen -->
+    <string name="no_saved_articles">No Saved Articles Yet</string>
+    <string name="save_articles_desc">Save articles to read later by tapping the bookmark icon on any news story.</string>
+    <string name="explore_news">Explore News</string>
+
+    <!-- Detail Screen -->
+    <string name="news_detail">News Detail</string>
+    <string name="read_full_article">Read Full Article in Browser</string>
+    <string name="data_not_found">News data not found</string>
+    <string name="cannot_open_browser">Cannot open browser</string>
+    <string name="no_content">No content available.</string>
+
+    <!-- Profile Screen -->
+    <string name="profile">Profile</string>
+    <string name="account_preferences">ACCOUNT PREFERENCES</string>
+    <string name="appearance">Appearance</string>
+    <string name="toggle_dark_theme">Toggle dark theme</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_desc">Breaking news &amp; alerts</string>
+    <string name="about_app">About Kabarin</string>
+    <string name="about_desc">v1.0.0 • Terms &amp; Privacy</string>
+    <string name="sign_out">Sign Out</string>
+
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="full_name">Full Name</string>
+    <string name="username">Username</string>
+    <string name="location">Location</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="hint_full_name">Enter your name</string>
+    <string name="hint_username">Enter username</string>
+    <string name="hint_location">Your location</string>
+
+    <!-- Feedback & Error Messages -->
+    <string name="news_saved">Article saved</string>
+    <string name="news_removed">Article removed</string>
+    <string name="connection_error">Connection problem. Please check your internet.</string>
+    <string name="load_failed">Failed to load results. Please try again.</string>
+    <string name="no_results">No results found for \"%1$s\"</string>
+    <string name="start_searching">Start searching for your favorite news</string>
+    <string name="profile_updated">Profile updated</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="location_failed">Failed to get location</string>
+    <string name="retry">Retry</string>
+    <string name="unknown_source">Unknown Source</string>
+    <string name="just_now">Just now</string>
+    <string name="mins_ago">%d mins ago</string>
+    <string name="hrs_ago">%d hrs ago</string>
+    <string name="days_ago">%d days ago</string>
 </resources>

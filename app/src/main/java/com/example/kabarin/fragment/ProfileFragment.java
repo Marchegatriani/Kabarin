@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kabarin.R;
 import com.example.kabarin.activity.WelcomeActivity;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -78,6 +79,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateUI() {
+        if (!isAdded()) return;
+
         String name = prefs.getString("userName", "User");
         String username = prefs.getString("userNickname", "username");
         String location = prefs.getString("userLocation", "Location");
@@ -87,8 +90,16 @@ public class ProfileFragment extends Fragment {
         tvMemberBadge.setText("@" + username);
         tvUserBio.setText(location);
 
-        if (photoUri != null) {
-            Glide.with(this).load(Uri.parse(photoUri)).placeholder(R.drawable.ic_profile).into(ivProfilePhoto);
+        if (photoUri != null && !photoUri.isEmpty()) {
+            Glide.with(this)
+                    .load(Uri.parse(photoUri))
+                    .placeholder(R.drawable.ic_profile)
+                    .error(R.drawable.ic_profile)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Menghindari cache agar foto langsung ganti
+                    .skipMemoryCache(true)
+                    .into(ivProfilePhoto);
+        } else {
+            ivProfilePhoto.setImageResource(R.drawable.ic_profile);
         }
     }
 

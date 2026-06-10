@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.kabarin.R;
@@ -34,7 +36,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         article = (Article) getIntent().getSerializableExtra("article");
         if (article == null) {
-            Toast.makeText(this, "Data berita tidak ditemukan", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.data_not_found, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -63,7 +65,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl()));
                 startActivity(browserIntent);
             } catch (Exception e) {
-                Toast.makeText(this, "Tidak dapat membuka browser", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.cannot_open_browser, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -72,17 +74,23 @@ public class NewsDetailActivity extends AppCompatActivity {
         tvDetailTitle.setText(article.getTitle());
         
         String author = (article.getAuthor() != null && !article.getAuthor().isEmpty()) 
-                ? article.getAuthor() : "Unknown Source";
+                ? article.getAuthor() : getString(R.string.unknown_source);
         String date = (article.getPublishedAt() != null) ? article.getPublishedAt() : "";
         
         tvDetailAuthorTime.setText("By " + author + (date.isEmpty() ? "" : " • " + date));
         
-        // Pengecekan isi konten
+        // Content check
         String content = article.getContent();
         if (content == null || content.isEmpty()) {
             content = article.getDescription();
         }
-        tvDetailContent.setText(content != null ? content : "No content available.");
+        
+        if (content != null) {
+            // Engineer's Fix: Render HTML content to remove tags like <ul><li> etc.
+            tvDetailContent.setText(HtmlCompat.fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY));
+        } else {
+            tvDetailContent.setText(R.string.no_content);
+        }
 
         if (!isFinishing()) {
             Glide.with(this)
@@ -98,10 +106,10 @@ public class NewsDetailActivity extends AppCompatActivity {
         fabSave.setOnClickListener(v -> {
             if (savedNewsManager.isSaved(article)) {
                 savedNewsManager.removeArticle(article);
-                Toast.makeText(this, "Berita dihapus dari simpanan", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.news_removed, Toast.LENGTH_SHORT).show();
             } else {
                 savedNewsManager.saveArticle(article);
-                Toast.makeText(this, "Berita berhasil disimpan!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.news_saved, Toast.LENGTH_SHORT).show();
             }
             updateFabIcon();
         });

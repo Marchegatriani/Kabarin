@@ -7,16 +7,15 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
 
-    <!-- ===== CONTENT ===== -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,7 +27,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="none"
-                    android:background="?attr/colorSurface"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp">
 
@@ -46,165 +44,102 @@
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
-                            android:text="All"
+                            android:text="@string/category_all"
                             android:checked="true"
                             app:chipBackgroundColor="@color/selector_chip_bg"
-                            android:textColor="@color/selector_chip_text"
-                            app:chipStrokeWidth="0dp"
-                            app:chipCornerRadius="18dp" />
+                            android:textColor="@color/selector_chip_text" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipTechnology"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
-                            android:text="Technology"
+                            android:text="@string/category_technology"
                             app:chipBackgroundColor="@color/selector_chip_bg"
-                            android:textColor="@color/selector_chip_text"
-                            app:chipStrokeWidth="0dp"
-                            app:chipCornerRadius="18dp" />
+                            android:textColor="@color/selector_chip_text" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipSports"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
-                            android:text="Sports"
+                            android:text="@string/category_sports"
                             app:chipBackgroundColor="@color/selector_chip_bg"
-                            android:textColor="@color/selector_chip_text"
-                            app:chipStrokeWidth="0dp"
-                            app:chipCornerRadius="18dp" />
+                            android:textColor="@color/selector_chip_text" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipBusiness"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
-                            android:text="Business"
+                            android:text="@string/category_business"
                             app:chipBackgroundColor="@color/selector_chip_bg"
-                            android:textColor="@color/selector_chip_text"
-                            app:chipStrokeWidth="0dp"
-                            app:chipCornerRadius="18dp" />
+                            android:textColor="@color/selector_chip_text" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipHealth"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="36dp"
-                            android:text="Health"
+                            android:text="@string/category_health"
                             app:chipBackgroundColor="@color/selector_chip_bg"
-                            android:textColor="@color/selector_chip_text"
-                            app:chipStrokeWidth="0dp"
-                            app:chipCornerRadius="18dp" />
+                            android:textColor="@color/selector_chip_text" />
 
                     </com.google.android.material.chip.ChipGroup>
                 </HorizontalScrollView>
 
-                <LinearLayout
+                <!-- Trending Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trending_headlines"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="?attr/colorOnSurface" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTrending"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:paddingStart="16dp"
+                    android:clipToPadding="false"
+                    tools:listitem="@layout/item_trending_news" />
+
+                <!-- Latest News Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/latest_news"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="?attr/colorOnSurface" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvLatestNews"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="8dp">
+                    android:nestedScrollingEnabled="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="80dp"
+                    tools:listitem="@layout/item_news" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingBottom="12dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Trending Headlines"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
-
-                        <TextView
-                            android:id="@+id/tvViewAllTrending"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="View All →"
-                            android:textSize="13sp"
-                            android:textColor="?attr/colorPrimary"
-                            android:padding="4dp" />
-
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvTrending"
-                        android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="8dp"
-                        android:clipToPadding="false"
-                        tools:listitem="@layout/item_trending_news" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="12dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Latest News"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
-
-                        <TextView
-                            android:id="@+id/tvFilter"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="≡"
-                            android:textSize="20sp"
-                            android:textColor="?attr/colorOnSurface"
-                            android:gravity="center"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="Filter" />
-
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvLatestNews"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:paddingBottom="80dp"
-                        android:clipToPadding="false"
-                        tools:listitem="@layout/item_news" />
-
-                </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- Floating Search Button di Sudut Kanan Bawah -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:src="@android:drawable/ic_search_category_default"
         android:contentDescription="Search"
         app:layout_constraintBottom_toBottomOf="parent"

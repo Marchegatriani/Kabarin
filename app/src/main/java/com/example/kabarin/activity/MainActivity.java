@@ -9,6 +9,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -38,13 +39,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setContentView(R.layout.activity_main);
 
         prefs = getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
-        // Daftarkan listener agar tahu saat data profile berubah
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appBarLayout);
-        if (appBarLayout == null) {
-            appBarLayout = (AppBarLayout) toolbar.getParent();
+        if (appBarLayout == null && toolbar != null) {
+            if (toolbar.getParent() instanceof AppBarLayout) {
+                appBarLayout = (AppBarLayout) toolbar.getParent();
+            }
         }
         setSupportActionBar(toolbar);
         
@@ -56,42 +58,67 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainer);
-        NavController navController = navHostFragment.getNavController();
+        if (navHostFragment != null) {
+            NavController navController = navHostFragment.getNavController();
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_search, R.id.nav_saved)
-                .setOpenableLayout(drawer)
-                .build();
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home, R.id.nav_saved, R.id.nav_profile)
+                    .setOpenableLayout(drawer)
+                    .build();
 
-        NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-        NavigationUI.setupWithNavController(bottomNav, navController);
+            NavigationUI.setupWithNavController(toolbar, navController, mAppBarConfiguration);
+            NavigationUI.setupWithNavController(navigationView, navController);
+            NavigationUI.setupWithNavController(bottomNav, navController);
 
-        if (ivToolbarProfile != null) {
-            ivToolbarProfile.setOnClickListener(v -> {
-                navController.navigate(R.id.nav_profile);
-            });
-            updateToolbarProfileImage();
-        }
-
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.nav_search) {
-                appBarLayout.setVisibility(View.GONE);
-            } else {
-                appBarLayout.setVisibility(View.VISIBLE);
-                if (destination.getId() == R.id.nav_profile || destination.getId() == R.id.nav_edit_profile) {
-                    ivToolbarProfile.setVisibility(View.GONE);
-                } else {
-                    ivToolbarProfile.setVisibility(View.VISIBLE);
-                    updateToolbarProfileImage(); 
-                }
+            if (ivToolbarProfile != null) {
+                ivToolbarProfile.setOnClickListener(v -> {
+                    navController.navigate(R.id.nav_profile);
+                });
+                updateToolbarProfileImage();
             }
-        });
+
+            // Fix: Dynamic Behavior & Bottom Margin Management
+            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+                int destId = destination.getId();
+                
+                View container = findViewById(R.id.fragmentContainer);
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) container.getLayoutParams();
+                
+                // Hitung tinggi standar BottomNav (80dp untuk Material 3)
+                int bottomNavHeight = (int) (80 * getResources().getDisplayMetrics().density);
+
+                if (destId == R.id.nav_search) {
+                    if (appBarLayout != null) {
+                        appBarLayout.setVisibility(View.GONE);
+                        appBarLayout.setExpanded(false, false);
+                    }
+                    params.setBehavior(null);
+                    params.bottomMargin = 0; // Search full screen
+                } else {
+                    if (appBarLayout != null) {
+                        appBarLayout.setVisibility(View.VISIBLE);
+                        appBarLayout.setExpanded(true, false);
+                    }
+                    params.setBehavior(new AppBarLayout.ScrollingViewBehavior());
+                    params.bottomMargin = bottomNavHeight; // Berikan ruang agar FAB tidak tertutup BottomNav
+
+                    if (ivToolbarProfile != null) {
+                        if (destId == R.id.nav_profile || destId == R.id.nav_edit_profile) {
+                            ivToolbarProfile.setVisibility(View.GONE);
+                        } else {
+                            ivToolbarProfile.setVisibility(View.VISIBLE);
+                            updateToolbarProfileImage(); 
+                        }
+                    }
+                }
+                container.setLayoutParams(params);
+                container.requestLayout();
+            });
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Jika profileUri atau isDarkMode berubah, segera update UI
         if ("profileUri".equals(key)) {
             updateToolbarProfileImage();
         }
@@ -106,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Unregister untuk mencegah memory leak
         if (prefs != null) {
             prefs.unregisterOnSharedPreferenceChangeListener(this);
         }
@@ -143,8 +169,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public boolean onSupportNavigateUp() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragmentContainer);
-        NavController navController = navHostFragment.getNavController();
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        if (navHostFragment != null) {
+            NavController navController = navHostFragment.getNavController();
+            return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                    || super.onSupportNavigateUp();
+        }
+        return super.onSupportNavigateUp();
     }
 }

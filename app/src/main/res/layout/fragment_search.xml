@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
 
-    <!-- Header Search - Sekarang mentok ke atas -->
+    <!-- Header Search -->
     <LinearLayout
         android:id="@+id/layoutSearchHeader"
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 app:iconifiedByDefault="false"
                 app:queryBackground="@android:color/transparent"
-                app:queryHint="Cari berita di sini..." />
+                app:queryHint="@string/search_hint" />
 
         </LinearLayout>
 
@@ -41,7 +41,7 @@
             android:background="?attr/colorOutline" />
     </LinearLayout>
 
-    <!-- Hasil Pencarian -->
+    <!-- Search Results -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchResult"
         android:layout_width="match_parent"
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Mulai cari berita favoritmu"
+            android:text="@string/start_searching"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Coba Lagi"
+            android:text="Retry"
             android:visibility="gone"
             app:cornerRadius="12dp"
             android:backgroundTint="?attr/colorPrimary"

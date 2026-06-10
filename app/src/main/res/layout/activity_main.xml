@@ -10,16 +10,18 @@
     tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/windowBackground">
 
-        <!-- Toolbar Tunggal (Header Utama) -->
+        <!-- AppBarLayout tetap menangani insets -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.Kabarin.AppBarOverlay"
+            android:fitsSystemWindows="true"
             app:elevation="0dp">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -31,7 +33,6 @@
                 app:titleTextColor="?attr/colorOnSurface"
                 app:popupTheme="@style/Theme.Kabarin.PopupOverlay">
 
-                <!-- Icon Profile di Kanan Atas -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/ivToolbarProfile"
                     android:layout_width="32dp"
@@ -41,7 +42,7 @@
                     android:src="@drawable/ic_profile"
                     android:scaleType="centerCrop"
                     android:background="@android:color/darker_gray"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+                    app:shapeAppearance="@style/ShapeAppearance.Kabarin.Circle"
                     app:strokeColor="?attr/colorOutline"
                     app:strokeWidth="1dp" />
 
@@ -49,22 +50,19 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- Container untuk Fragment -->
+        <!-- FragmentContainerView tanpa behavior default di XML (kita set via Java) -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainer"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="64dp"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:navGraph="@navigation/nav_graph" />
 
-        <!-- Bottom Navigation Bar -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?attr/colorSurface"
             app:itemIconTint="@color/selector_bottom_nav"
@@ -75,7 +73,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

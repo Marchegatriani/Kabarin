@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorSurface"
-            app:navigationIcon="@android:drawable/ic_menu_revert"
             app:navigationIconTint="?attr/colorOnSurface"
             app:title="News Detail"
             app:titleTextColor="?attr/colorOnSurface" />
@@ -86,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@android:drawable/btn_star_big_off"
+        android:src="@drawable/ic_save"
         app:tint="?attr/colorOnPrimary"
         app:backgroundTint="?attr/colorPrimary" />
 

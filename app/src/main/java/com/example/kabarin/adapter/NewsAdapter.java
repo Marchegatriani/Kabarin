@@ -1,5 +1,6 @@
 package com.example.kabarin.adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.kabarin.R;
 import com.example.kabarin.model.Article;
+import com.example.kabarin.utils.SavedNewsManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,9 +31,15 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int viewType;
     private final String category; 
     private OnItemClickListener listener;
+    private OnSaveClickListener saveListener;
+    private SavedNewsManager savedNewsManager;
 
     public interface OnItemClickListener {
         void onItemClick(Article article);
+    }
+
+    public interface OnSaveClickListener {
+        void onSaveClick(Article article);
     }
 
     public NewsAdapter(List<Article> articles, int viewType, String category) {
@@ -42,6 +50,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setOnSaveClickListener(OnSaveClickListener listener) {
+        this.saveListener = listener;
+    }
+
+    public void setSavedNewsManager(SavedNewsManager savedNewsManager) {
+        this.savedNewsManager = savedNewsManager;
     }
 
     static class TrendingViewHolder extends RecyclerView.ViewHolder {
@@ -59,12 +75,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class LatestViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivImage;
+        ImageView ivImage, ivSave;
         TextView  tvCategory, tvReadTime, tvTitle, tvDescription;
 
         LatestViewHolder(View v) {
             super(v);
             ivImage       = v.findViewById(R.id.ivNewsImage);
+            ivSave        = v.findViewById(R.id.ivSave);
             tvCategory    = v.findViewById(R.id.tvNewsCategory);
             tvReadTime    = v.findViewById(R.id.tvReadTime);
             tvTitle       = v.findViewById(R.id.tvNewsTitle);
@@ -100,10 +117,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void bindTrending(TrendingViewHolder h, Article article) {
         h.tvTitle.setText(nvl(article.getTitle(), ""));
-        h.tvAuthor.setText((article.getAuthor() != null && !article.getAuthor().isEmpty()) ? "By " + article.getAuthor() : "Unknown");
-        h.tvTime.setText(formatTimeAgo(article.getPublishedAt()));
+        String author = (article.getAuthor() != null && !article.getAuthor().isEmpty()) ? "By " + article.getAuthor() : h.itemView.getContext().getString(R.string.unknown_source);
+        h.tvAuthor.setText(author);
+        h.tvTime.setText(formatTimeAgo(h.itemView.getContext(), article.getPublishedAt()));
 
-        // Menggunakan Smart Labeling
+        // Using Smart Labeling
         String displayLabel = inferCategory(article);
         h.tvCategory.setText("#" + displayLabel);
 
@@ -116,11 +134,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         h.tvTitle.setText(nvl(article.getTitle(), ""));
         h.tvDescription.setText(nvl(article.getDescription(), ""));
 
-        // Menggunakan Smart Labeling
+        // Using Smart Labeling
         String displayLabel = inferCategory(article);
         h.tvCategory.setText(displayLabel);
         
-        // Update warna badge agar bervariasi sesuai kategori yang terdeteksi
+        // Update badge color to vary according to detected category
         if (h.tvCategory.getBackground() != null) {
             h.tvCategory.getBackground().mutate().setTint(badgeColor(displayLabel));
         }
@@ -131,6 +149,25 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Glide.with(h.ivImage).load(article.getUrlToImage())
                 .placeholder(R.color.selector_chip_bg).error(R.color.selector_chip_bg)
                 .centerCrop().into(h.ivImage);
+
+        // Update Save Icon State (Color & Alpha)
+        if (savedNewsManager != null) {
+            boolean isSaved = savedNewsManager.isSaved(article);
+            if (isSaved) {
+                h.ivSave.setColorFilter(Color.parseColor("#1565C0")); // Blue color
+                h.ivSave.setAlpha(1.0f);
+            } else {
+                h.ivSave.clearColorFilter(); // Revert to default
+                h.ivSave.setAlpha(0.4f);
+            }
+        }
+
+        h.ivSave.setOnClickListener(v -> {
+            if (saveListener != null) {
+                saveListener.onSaveClick(article);
+                notifyItemChanged(h.getAdapterPosition());
+            }
+        });
     }
 
     private String nvl(String s, String fallback) {
@@ -139,7 +176,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * Smart Category Inference:
-     * Menebak kategori berdasarkan kata kunci jika berada di tab 'All' (general)
+     * Guess the category based on keywords if in the 'All' (general) tab
      */
     private String inferCategory(Article article) {
         if (!category.equalsIgnoreCase("general")) {
@@ -158,7 +195,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (text.contains("politic") || text.contains("government") || text.contains("election") || text.contains("president") || text.contains("minister")) return "POLITICS";
         if (text.contains("movie") || text.contains("music") || text.contains("entertainment") || text.contains("hollywood") || text.contains("celebrity")) return "ENTERTAINMENT";
         
-        // Fallback ke nama sumber jika tidak ada kata kunci yang cocok
+        // Fallback to source name if no keywords match
         return (article.getSource() != null && article.getSource().getName() != null) 
                 ? article.getSource().getName().toUpperCase() : "GENERAL";
     }
@@ -175,20 +212,20 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return Color.parseColor("#1A8A6B"); // Default teal
     }
 
-    private String formatTimeAgo(String publishedAt) {
-        if (publishedAt == null || publishedAt.isEmpty()) return "Just now";
+    private String formatTimeAgo(Context context, String publishedAt) {
+        if (publishedAt == null || publishedAt.isEmpty()) return context.getString(R.string.just_now);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = sdf.parse(publishedAt);
-            if (date == null) return "Just now";
+            if (date == null) return context.getString(R.string.just_now);
             long mins = (System.currentTimeMillis() - date.getTime()) / 60_000;
-            if (mins < 1)    return "Just now";
-            if (mins < 60)   return mins + " mins ago";
-            if (mins < 1440) return (mins / 60) + " hrs ago";
-            return (mins / 1440) + " days ago";
+            if (mins < 1)    return context.getString(R.string.just_now);
+            if (mins < 60)   return context.getString(R.string.mins_ago, (int)mins);
+            if (mins < 1440) return context.getString(R.string.hrs_ago, (int)(mins / 60));
+            return context.getString(R.string.days_ago, (int)(mins / 1440));
         } catch (Exception e) {
-            return "Just now";
+            return context.getString(R.string.just_now);
         }
     }
 }

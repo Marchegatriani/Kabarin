@@ -47,7 +47,7 @@ public class SearchFragment extends Fragment {
     private Button btnRetry;
     private String lastQuery = "";
 
-    // Handler untuk debouncing (menunda pencarian saat mengetik)
+    // Handler for debouncing (delaying search while typing)
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
 
@@ -73,11 +73,11 @@ public class SearchFragment extends Fragment {
 
         rvSearchResult.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Konfigurasi SearchView agar langsung terbuka dan fokus
+        // Configure SearchView to be open and focused immediately
         searchView.setIconified(false);
         searchView.requestFocus();
         
-        // Memunculkan keyboard secara otomatis
+        // Show keyboard automatically
         searchView.postDelayed(() -> {
             if (isAdded() && getContext() != null) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -91,7 +91,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.trim().isEmpty()) {
-                    // Batalkan pending search jika user tekan enter
+                    // Cancel pending search if user presses enter
                     searchHandler.removeCallbacks(searchRunnable);
                     lastQuery = query;
                     performSearch(query);
@@ -102,27 +102,27 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Hapus callback yang lama setiap kali user mengetik karakter baru
+                // Remove old callback whenever user types a new character
                 searchHandler.removeCallbacks(searchRunnable);
 
                 if (newText != null && !newText.trim().isEmpty()) {
-                    // Set status loading sementara menunggu debouncing
+                    // Set loading status while waiting for debouncing
                     progressBar.setVisibility(View.VISIBLE);
                     layoutSearchStatus.setVisibility(View.GONE);
                     rvSearchResult.setVisibility(View.GONE);
 
-                    // Jalankan pencarian setelah delay 800ms
+                    // Run search after 800ms delay
                     searchRunnable = () -> {
                         lastQuery = newText;
                         performSearch(newText);
                     };
                     searchHandler.postDelayed(searchRunnable, 800);
                 } else {
-                    // Jika teks dihapus, sembunyikan loading dan hasil
+                    // If text is cleared, hide loading and results
                     progressBar.setVisibility(View.GONE);
                     rvSearchResult.setVisibility(View.GONE);
                     layoutSearchStatus.setVisibility(View.VISIBLE);
-                    tvSearchStatus.setText("Mulai cari berita favoritmu");
+                    tvSearchStatus.setText("Start searching for your favorite news");
                 }
                 return true;
             }
@@ -152,10 +152,10 @@ public class SearchFragment extends Fragment {
                             if (articles != null && !articles.isEmpty()) {
                                 showResults(articles);
                             } else {
-                                showEmptyState("Tidak ada hasil untuk \"" + query + "\"");
+                                showEmptyState("No results found for \"" + query + "\"");
                             }
                         } else {
-                            showErrorState("Gagal memuat hasil. Silakan coba lagi.");
+                            showErrorState("Failed to load results. Please try again.");
                         }
                     }
 
@@ -163,7 +163,7 @@ public class SearchFragment extends Fragment {
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
                         if (!isAdded()) return;
                         progressBar.setVisibility(View.GONE);
-                        showErrorState("Masalah koneksi. Periksa internet Anda.");
+                        showErrorState("Connection problem. Please check your internet.");
                     }
                 });
     }
@@ -200,7 +200,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Bersihkan handler saat view dihancurkan untuk menghindari memory leak
+        // Clear handler when view is destroyed to avoid memory leak
         searchHandler.removeCallbacks(searchRunnable);
     }
 }

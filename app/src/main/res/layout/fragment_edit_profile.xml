@@ -46,7 +46,7 @@
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_profile"
-                        app:cornerSize="50%" />
+                        app:shapeAppearance="@style/ShapeAppearance.Kabarin.Circle" />
 
                     <!-- Badge Ikon Pensil -->
                     <com.google.android.material.card.MaterialCardView

@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="8dp"
-            android:text="ACCOUNT PREFERENCES"
+            android:text="@string/account_preferences"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="11sp"
             android:textStyle="bold"
@@ -182,7 +182,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Appearance"
+                            android:text="@string/appearance"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -190,7 +190,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Toggle dark theme"
+                            android:text="@string/toggle_dark_theme"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
 
@@ -253,7 +253,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Notifications"
+                            android:text="@string/notifications"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -261,7 +261,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Breaking news &amp; alerts"
+                            android:text="@string/notifications_desc"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
 
@@ -325,7 +325,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="About Kabarin"
+                            android:text="@string/about_app"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -333,7 +333,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="v1.0.0 • Terms &amp; Privacy"
+                            android:text="@string/about_desc"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
 
@@ -396,7 +396,7 @@
                     android:id="@+id/tvSignOut"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sign Out"
+                    android:text="@string/sign_out"
                     android:textColor="#BA1A1A"
                     android:textSize="14sp"
                     android:textStyle="bold" />

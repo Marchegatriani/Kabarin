@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="No Saved Articles Yet"
+                android:text="@string/no_saved_articles"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -84,7 +84,7 @@
                 android:layout_marginBottom="26dp"
                 android:gravity="center"
                 android:lineSpacingMultiplier="1.2"
-                android:text="Save articles to read later by tapping the bookmark icon on any news story."
+                android:text="@string/save_articles_desc"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
 
@@ -95,7 +95,7 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
-                android:text="Explore News"
+                android:text="@string/explore_news"
                 android:textAllCaps="false"
                 android:textColor="?attr/colorOnPrimary"
                 app:cornerRadius="12dp" />
