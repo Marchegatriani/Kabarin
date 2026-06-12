@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme for Night mode. -->
     <style name="Base.Theme.Kabarin" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#D0E4F7</item>
         <item name="colorOnPrimary">#003355</item>
@@ -11,10 +10,8 @@
         <item name="colorOnSurfaceVariant">#C2C7CF</item>
         <item name="colorOutline">#41474D</item>
 
-        <!-- Memastikan ikon (seperti hamburger) berwarna terang di mode malam -->
         <item name="colorControlNormal">?attr/colorOnSurface</item>
     </style>
 
-    <!-- Overlay Toolbar untuk mode malam -->
     <style name="Theme.Kabarin.AppBarOverlay" parent="ThemeOverlay.Material3.ActionBar" />
 </resources>

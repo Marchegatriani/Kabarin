@@ -17,25 +17,21 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Handler untuk delay 2 detik
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Cek session login dari SharedPreferences
                 SharedPreferences sharedPreferences = getSharedPreferences("KabarinPrefs", MODE_PRIVATE);
                 boolean isLogin = sharedPreferences.getBoolean("isLogin", false);
 
                 Intent intent;
                 if (isLogin) {
-                    // Jika sudah login, lanjut ke MainActivity
                     intent = new Intent(SplashActivity.this, MainActivity.class);
                 } else {
-                    // Jika belum login, ke WelcomeActivity
                     intent = new Intent(SplashActivity.this, WelcomeActivity.class);
                 }
                 
                 startActivity(intent);
-                finish(); // Agar user tidak bisa kembali ke Splash
+                finish();
             }
         }, 2000); // 2000 milidetik = 2 detik
     }

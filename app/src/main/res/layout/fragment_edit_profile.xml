@@ -31,7 +31,6 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- Profile Picture Section (Klik area ini untuk ganti foto) -->
                 <FrameLayout
                     android:id="@+id/frameProfilePicture"
                     android:layout_width="100dp"
@@ -48,7 +47,6 @@
                         android:src="@drawable/ic_profile"
                         app:shapeAppearance="@style/ShapeAppearance.Kabarin.Circle" />
 
-                    <!-- Badge Ikon Pensil -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="28dp"
                         android:layout_height="28dp"

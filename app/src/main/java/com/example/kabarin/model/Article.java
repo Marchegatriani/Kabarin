@@ -22,8 +22,6 @@ public class Article implements Serializable {
     private String url;
 
     public Article() {}
-
-    // Constructor untuk Database
     public Article(String title, String description, String urlToImage, String url, String sourceName, String publishedAt) {
         this.title = title;
         this.description = description;

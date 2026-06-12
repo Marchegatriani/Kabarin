@@ -22,10 +22,9 @@ public class SavedNewsManager {
 
     public void saveArticle(Article article) {
         List<Article> savedArticles = getSavedArticles();
-        // Check if already saved
         for (Article a : savedArticles) {
             if (a.getUrl().equals(article.getUrl())) {
-                return; // Already saved
+                return;
             }
         }
         savedArticles.add(article);

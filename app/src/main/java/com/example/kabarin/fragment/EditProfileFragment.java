@@ -51,12 +51,10 @@ public class EditProfileFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
     private Uri selectedImageUri;
 
-    // Launcher untuk Galeri
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri != null) {
                     selectedImageUri = uri;
-                    // Penting: Ambil hak akses baca persisten untuk URI ini agar bisa dibaca di halaman lain/setelah restart
                     try {
                         requireContext().getContentResolver().takePersistableUriPermission(uri,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -103,7 +101,6 @@ public class EditProfileFragment extends Fragment {
         tlLocation = view.findViewById(R.id.tlLocation);
         btnSave = view.findViewById(R.id.btnSave);
 
-        // Load current data
         String currentName = prefs.getString("userName", "User");
         String currentUsername = prefs.getString("userNickname", "username");
         String currentLocation = prefs.getString("userLocation", "Location");
@@ -136,9 +133,7 @@ public class EditProfileFragment extends Fragment {
             if (selectedImageUri != null) {
                 editor.putString("profileUri", selectedImageUri.toString());
             }
-            
-            // Gunakan commit() alih-alih apply() agar perubahan langsung tersimpan secara sinkron
-            // sebelum kita kembali (navigateUp)
+
             editor.commit();
 
             Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_SHORT).show();

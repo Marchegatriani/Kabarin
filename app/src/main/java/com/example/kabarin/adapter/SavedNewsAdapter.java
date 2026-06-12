@@ -59,7 +59,6 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.View
         Article article = articles.get(position);
         holder.tvTitle.setText(article.getTitle());
         
-        // Menggunakan Smart Labeling
         String displayLabel = inferCategory(article);
         holder.chipCategory.setText(displayLabel);
         holder.chipCategory.setTextColor(badgeColor(displayLabel));
@@ -73,7 +72,6 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.View
                 .centerCrop()
                 .into(holder.ivImage);
 
-        // Gunakan ic_save untuk icon hapus/bookmark di list simpan
         holder.ivBookmark.setImageResource(R.drawable.ic_save);
         holder.ivBookmark.setColorFilter(Color.parseColor("#BA1A1A"));
 

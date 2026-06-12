@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Kabarin" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#1565C0</item>
         <item name="colorOnPrimary">#FFFFFF</item>
@@ -11,13 +10,11 @@
         <item name="colorOnSurfaceVariant">#5A6878</item>
         <item name="colorOutline">#E8ECF0</item>
 
-        <!-- Tambahkan ini untuk mengontrol warna ikon default (hamburger, dll) -->
         <item name="colorControlNormal">?attr/colorOnSurface</item>
     </style>
 
     <style name="Theme.Kabarin" parent="Base.Theme.Kabarin" />
 
-    <!-- Ubah parent agar mendukung DayNight, bukan dipaksa Light -->
     <style name="Theme.Kabarin.AppBarOverlay" parent="ThemeOverlay.Material3.ActionBar" />
     <style name="Theme.Kabarin.PopupOverlay" parent="ThemeOverlay.Material3.DynamicColors.DayNight" />
 

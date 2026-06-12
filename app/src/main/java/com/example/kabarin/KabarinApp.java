@@ -16,9 +16,7 @@ public class KabarinApp extends Application {
 
     private void applySavedTheme() {
         SharedPreferences prefs = getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
-        
-        // Menggunakan "FOLLOW_SYSTEM" jika user belum pernah mengatur tema secara manual
-        // Agar konsisten dengan pengaturan HP user di awal.
+
         if (!prefs.contains("isDarkMode")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         } else {

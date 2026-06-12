@@ -75,7 +75,6 @@ public class HomeFragment extends Fragment {
         rvLatestNews.setLayoutManager(new LinearLayoutManager(getContext()));
         rvLatestNews.setNestedScrollingEnabled(false);
 
-        // FAB Search Click
         if (fabSearch != null) {
             fabSearch.setOnClickListener(v -> 
                 Navigation.findNavController(v).navigate(R.id.action_nav_home_to_nav_search)
@@ -100,14 +99,13 @@ public class HomeFragment extends Fragment {
     private void refreshData() {
         if (swipeRefresh != null) swipeRefresh.setRefreshing(true);
         if (NetworkUtils.isNetworkConnected(requireContext())) {
-            fetchNews(currentCategory, true);
-            fetchNews(currentCategory, false);
+            fetchHomeData(currentCategory);
         } else {
             loadOfflineData();
         }
     }
 
-    private void fetchNews(String category, boolean isTrending) {
+    private void fetchHomeData(String category) {
         RetrofitClient.getApiService()
                 .getTopHeadlines("us", category, Constants.API_KEY)
                 .enqueue(new Callback<NewsResponse>() {
@@ -115,15 +113,27 @@ public class HomeFragment extends Fragment {
                     public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
                         if (!isAdded()) return;
                         if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+                        
                         if (response.isSuccessful() && response.body() != null) {
-                            List<Article> articles = response.body().getArticles();
-                            if (articles != null) {
-                                if (isTrending) {
-                                    rvTrending.setAdapter(createAdapter(articles.subList(0, Math.min(articles.size(), 5)), category, NewsAdapter.TYPE_TRENDING));
-                                } else {
-                                    rvLatestNews.setAdapter(createAdapter(articles, category, NewsAdapter.TYPE_LATEST));
-                                    updateCache(articles);
+                            List<Article> allArticles = response.body().getArticles();
+                            if (allArticles != null && !allArticles.isEmpty()) {
+                                
+                                // Opsi B: Membagi data agar tidak duplikat
+                                // 1. Trending: Ambil 5 berita pertama
+                                int trendingCount = Math.min(allArticles.size(), 5);
+                                List<Article> trendingList = new ArrayList<>(allArticles.subList(0, trendingCount));
+                                rvTrending.setAdapter(createAdapter(trendingList, category, NewsAdapter.TYPE_TRENDING));
+                                rvTrending.setVisibility(View.VISIBLE);
+
+                                // 2. Latest News: Ambil sisanya (mulai dari indeks ke-5)
+                                List<Article> latestList = new ArrayList<>();
+                                if (allArticles.size() > trendingCount) {
+                                    latestList = new ArrayList<>(allArticles.subList(trendingCount, allArticles.size()));
                                 }
+                                
+                                rvLatestNews.setAdapter(createAdapter(latestList, category, NewsAdapter.TYPE_LATEST));
+                                
+                                updateCache(allArticles);
                             }
                         }
                     }

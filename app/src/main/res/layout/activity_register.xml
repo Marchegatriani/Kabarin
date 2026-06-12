@@ -264,7 +264,6 @@
 
                 </LinearLayout>
 
-                <!-- Tombol Create Account -->
                 <Button
                     android:id="@+id/btnCreateAccount"
                     android:layout_width="match_parent"

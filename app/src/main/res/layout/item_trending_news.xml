@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    item_trending_news.xml
-    Card horizontal 260dp – gambar fullbleed, gradient overlay, teks di bawah.
-    TIDAK ada referensi drawable icon (clock icon diganti karakter Unicode ⏱).
--->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,7 +9,6 @@
     app:cardElevation="4dp"
     app:strokeWidth="0dp">
 
-    <!-- Gambar latar -->
     <ImageView
         android:id="@+id/ivTrendingImage"
         android:layout_width="match_parent"
@@ -22,20 +16,17 @@
         android:scaleType="centerCrop"
         android:contentDescription="News image" />
 
-    <!-- Gradient overlay: transparan atas → hitam bawah -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_overlay_trending" />
 
-    <!-- Konten teks di atas overlay -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="14dp">
 
-        <!-- Badge kategori: background di-set via kode, tidak butuh drawable -->
         <TextView
             android:id="@+id/tvTrendingCategory"
             android:layout_width="wrap_content"
@@ -49,13 +40,11 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp" />
 
-        <!-- Spacer dorong judul ke bawah -->
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- Judul berita -->
         <TextView
             android:id="@+id/tvTrendingTitle"
             android:layout_width="match_parent"
@@ -72,7 +61,6 @@
             android:shadowDy="1"
             android:shadowRadius="3" />
 
-        <!-- Meta: waktu & penulis – ikon jam pakai karakter Unicode, tidak butuh drawable -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +68,6 @@
             android:gravity="center_vertical"
             android:layout_marginTop="6dp">
 
-            <!-- Karakter ⏱ sebagai pengganti ic_clock drawable -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

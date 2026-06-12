@@ -14,7 +14,6 @@
         android:background="?attr/colorOutline"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- ===== LIST RECYCLER VIEW ===== -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSavedArticles"
         android:layout_width="0dp"
@@ -28,7 +27,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_saved_articles" />
 
-    <!-- ===== EMPTY STATE CARD ===== -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardEmptyState"
         android:layout_width="0dp"

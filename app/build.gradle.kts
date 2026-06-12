@@ -39,13 +39,10 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 
-    // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // Chrome Custom Tabs
     implementation("androidx.browser:browser:1.8.0")
 
-    // Google Play Services for Location
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
     testImplementation(libs.junit)

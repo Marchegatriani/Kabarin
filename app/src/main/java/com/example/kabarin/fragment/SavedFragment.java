@@ -42,7 +42,6 @@ public class SavedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Inisialisasi View
         rvSavedArticles = view.findViewById(R.id.rvSavedArticles);
         cardEmptyState  = view.findViewById(R.id.cardEmptyState);
         btnExploreNews  = view.findViewById(R.id.btnExploreNews);
@@ -51,7 +50,6 @@ public class SavedFragment extends Fragment {
 
         rvSavedArticles.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Tombol Explore: Kembali ke tab Home
         btnExploreNews.setOnClickListener(v -> {
             if (getActivity() != null) {
                 BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottomNavigation);
@@ -74,11 +72,9 @@ public class SavedFragment extends Fragment {
         List<Article> savedArticles = savedNewsManager.getSavedArticles();
         
         if (savedArticles == null || savedArticles.isEmpty()) {
-            // Tampilkan Empty State, sembunyikan List
             rvSavedArticles.setVisibility(View.GONE);
             cardEmptyState.setVisibility(View.VISIBLE);
         } else {
-            // Tampilkan List, sembunyikan Empty State
             rvSavedArticles.setVisibility(View.VISIBLE);
             cardEmptyState.setVisibility(View.GONE);
 
@@ -91,7 +87,7 @@ public class SavedFragment extends Fragment {
             
             adapter.setOnRemoveClickListener(article -> {
                 savedNewsManager.removeArticle(article);
-                refreshSavedList(); // Refresh tampilan setelah dihapus
+                refreshSavedList();
             });
             
             rvSavedArticles.setAdapter(adapter);

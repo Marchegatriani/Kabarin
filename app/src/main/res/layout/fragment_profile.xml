@@ -16,7 +16,6 @@
         android:paddingTop="24dp"
         android:paddingBottom="32dp">
 
-        <!-- ===== PROFILE CARD ===== -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +35,6 @@
                 android:paddingTop="32dp"
                 android:paddingBottom="28dp">
 
-                <!-- Profile Picture with edit badge -->
                 <FrameLayout
                     android:id="@+id/frameProfilePicture"
                     android:layout_width="90dp"
@@ -53,7 +51,6 @@
                         android:src="@drawable/ic_profile"
                         app:shapeAppearance="@style/ShapeAppearance.Kabarin.Circle" />
 
-                    <!-- Edit badge (bottom-end) -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="26dp"
                         android:layout_height="26dp"
@@ -75,7 +72,6 @@
 
                 </FrameLayout>
 
-                <!-- Name -->
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
@@ -86,7 +82,6 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
 
-                <!-- Premium badge -->
                 <TextView
                     android:id="@+id/tvMemberBadge"
                     android:layout_width="wrap_content"
@@ -98,7 +93,6 @@
                     android:letterSpacing="0.08"
                     android:layout_marginBottom="12dp" />
 
-                <!-- Bio -->
                 <TextView
                     android:id="@+id/tvUserBio"
                     android:layout_width="match_parent"
@@ -113,7 +107,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ===== ACCOUNT PREFERENCES LABEL ===== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +118,6 @@
             android:textStyle="bold"
             android:letterSpacing="0.1" />
 
-        <!-- ===== PREFERENCES CARD ===== -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,7 +132,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Appearance Row -->
                 <LinearLayout
                     android:id="@+id/rowAppearance"
                     android:layout_width="match_parent"
@@ -153,7 +144,6 @@
                     android:clickable="true"
                     android:focusable="true">
 
-                    <!-- Icon container -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
@@ -204,7 +194,6 @@
 
                 </LinearLayout>
 
-                <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -212,7 +201,6 @@
                     android:background="?attr/colorOutline"
                     android:alpha="0.4" />
 
-                <!-- Notifications Row -->
                 <LinearLayout
                     android:id="@+id/rowNotifications"
                     android:layout_width="match_parent"
@@ -276,7 +264,6 @@
 
                 </LinearLayout>
 
-                <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -284,7 +271,6 @@
                     android:background="?attr/colorOutline"
                     android:alpha="0.4" />
 
-                <!-- About Row -->
                 <LinearLayout
                     android:id="@+id/rowAbout"
                     android:layout_width="match_parent"
@@ -352,7 +338,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ===== SIGN OUT ROW ===== -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

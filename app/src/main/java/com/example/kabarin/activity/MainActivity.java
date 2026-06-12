@@ -77,14 +77,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 updateToolbarProfileImage();
             }
 
-            // Fix: Dynamic Behavior & Bottom Margin Management
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
                 int destId = destination.getId();
                 
                 View container = findViewById(R.id.fragmentContainer);
                 CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) container.getLayoutParams();
                 
-                // Hitung tinggi standar BottomNav (80dp untuk Material 3)
                 int bottomNavHeight = (int) (80 * getResources().getDisplayMetrics().density);
 
                 if (destId == R.id.nav_search) {

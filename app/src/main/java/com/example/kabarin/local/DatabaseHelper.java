@@ -48,13 +48,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Query: Delete all cache
     public void clearCache() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NEWS, null, null);
     }
 
-    // Query: Insert cache
     public void saveArticles(List<Article> articles) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -75,7 +73,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // Query: Get all cached news
     public List<Article> getCachedArticles() {
         List<Article> articles = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

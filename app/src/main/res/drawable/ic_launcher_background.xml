@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/drawable/bg_splash_gradient.xml -->
-<!--
-    Warna dari Figma:
-    - FFFFFF (100%) → putih atas
-    - 004371 (60%)  → biru tengah-bawah
-    - 77BBFD (10%)  → biru muda aksen
--->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
         android:type="linear"

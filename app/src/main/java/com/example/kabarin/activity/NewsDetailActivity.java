@@ -86,7 +86,6 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         
         if (content != null) {
-            // Engineer's Fix: Render HTML content to remove tags like <ul><li> etc.
             tvDetailContent.setText(HtmlCompat.fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             tvDetailContent.setText(R.string.no_content);

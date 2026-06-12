@@ -24,7 +24,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Initialize Views
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -32,7 +31,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
         tvBackToLogin = findViewById(R.id.tvBackToLogin);
 
-        // Sign Up Button
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,13 +39,11 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
                 String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-                // Input validation
                 if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 } else if (!password.equals(confirmPassword)) {
                     Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Save account data to SharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("KabarinPrefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("savedUsername", fullName);
@@ -57,7 +53,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Toast.makeText(RegisterActivity.this, "Register successful", Toast.LENGTH_SHORT).show();
                     
-                    // Go back to LoginActivity
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -65,7 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // Back to Login text
         tvBackToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

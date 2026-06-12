@@ -21,10 +21,9 @@ public class WelcomeActivity extends AppCompatActivity {
         btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigasi ke LoginActivity
                 Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
-                finish(); // Tutup WelcomeActivity
+                finish();
             }
         });
     }

@@ -52,7 +52,6 @@ public class ProfileFragment extends Fragment {
 
         updateUI();
 
-        // Setup Dark Mode Switch
         boolean isDarkMode = prefs.getBoolean("isDarkMode", false);
         switchDarkMode.setChecked(isDarkMode);
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -64,7 +63,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // Klik foto profil (termasuk ikon pensil) untuk Edit Profile
         view.findViewById(R.id.frameProfilePicture).setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_nav_profile_to_nav_edit_profile);
         });
@@ -95,7 +93,7 @@ public class ProfileFragment extends Fragment {
                     .load(Uri.parse(photoUri))
                     .placeholder(R.drawable.ic_profile)
                     .error(R.drawable.ic_profile)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Menghindari cache agar foto langsung ganti
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(ivProfilePhoto);
         } else {
@@ -109,10 +107,8 @@ public class ProfileFragment extends Fragment {
                 .setTitle("Logout")
                 .setMessage("Yakin ingin keluar?")
                 .setPositiveButton("Ya", (d, w) -> {
-                    // Update status login di SharedPreferences
                     prefs.edit().putBoolean("isLogin", false).apply();
                     
-                    // Navigasi ke WelcomeActivity dan hapus tumpukan activity (Backstack)
                     Intent intent = new Intent(requireContext(), WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
 
-    <!-- Header Search -->
     <LinearLayout
         android:id="@+id/layoutSearchHeader"
         android:layout_width="match_parent"
@@ -41,7 +40,6 @@
             android:background="?attr/colorOutline" />
     </LinearLayout>
 
-    <!-- Search Results -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSearchResult"
         android:layout_width="match_parent"
@@ -53,7 +51,6 @@
         app:layout_constraintTop_toBottomOf="@id/layoutSearchHeader"
         tools:listitem="@layout/item_news" />
 
-    <!-- Loading State -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -64,7 +61,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutSearchHeader" />
 
-    <!-- Empty / Error State -->
     <LinearLayout
         android:id="@+id/layoutSearchStatus"
         android:layout_width="0dp"

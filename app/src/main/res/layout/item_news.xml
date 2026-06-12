@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- ── Gambar Berita ── -->
         <ImageView
             android:id="@+id/ivNewsImage"
             android:layout_width="match_parent"
@@ -24,7 +23,6 @@
             android:contentDescription="News image"
             android:src="@android:drawable/ic_menu_gallery" />
 
-        <!-- ── Konten Teks ── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +32,6 @@
             android:paddingTop="12dp"
             android:paddingBottom="14dp">
 
-            <!-- Baris: Badge Kategori + Estimasi Waktu Baca + Tombol Simpan -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +79,6 @@
 
             </LinearLayout>
 
-            <!-- Judul Berita -->
             <TextView
                 android:id="@+id/tvNewsTitle"
                 android:layout_width="match_parent"
@@ -96,7 +92,6 @@
                 android:lineSpacingMultiplier="1.25"
                 android:layout_marginBottom="6dp" />
 
-            <!-- Deskripsi Singkat -->
             <TextView
                 android:id="@+id/tvNewsDescription"
                 android:layout_width="match_parent"

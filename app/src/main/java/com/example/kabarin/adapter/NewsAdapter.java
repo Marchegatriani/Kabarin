@@ -134,11 +134,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         h.tvTitle.setText(nvl(article.getTitle(), ""));
         h.tvDescription.setText(nvl(article.getDescription(), ""));
 
-        // Using Smart Labeling
         String displayLabel = inferCategory(article);
         h.tvCategory.setText(displayLabel);
         
-        // Update badge color to vary according to detected category
         if (h.tvCategory.getBackground() != null) {
             h.tvCategory.getBackground().mutate().setTint(badgeColor(displayLabel));
         }
@@ -150,7 +148,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .placeholder(R.color.selector_chip_bg).error(R.color.selector_chip_bg)
                 .centerCrop().into(h.ivImage);
 
-        // Update Save Icon State (Color & Alpha)
         if (savedNewsManager != null) {
             boolean isSaved = savedNewsManager.isSaved(article);
             if (isSaved) {
@@ -174,10 +171,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return (s != null && !s.isEmpty()) ? s : fallback;
     }
 
-    /**
-     * Smart Category Inference:
-     * Guess the category based on keywords if in the 'All' (general) tab
-     */
     private String inferCategory(Article article) {
         if (!category.equalsIgnoreCase("general")) {
             return category.toUpperCase();

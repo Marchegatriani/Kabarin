@@ -8,7 +8,6 @@
     android:background="#0A1D2D"
     tools:context="activity.WelcomeActivity">
 
-    <!-- BACKGROUND IMAGE — rename foto Pinterest jadi img_welcome_bg, taruh di res/drawable/ -->
     <ImageView
         android:id="@+id/imgBackground"
         android:layout_width="0dp"
@@ -20,14 +19,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Overlay gelap gradient di atas foto -->
-
-    <!-- =============================================
-         TOP SECTION — Logo + Headline + Deskripsi (semua CENTER)
-         ============================================= -->
-
-    <!-- Logo: Icon kiri + teks "Kabarin", posisi center horizontal -->
 
     <View
         android:id="@+id/viewOverlay"
@@ -69,14 +60,6 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
-    <!-- Headline — center -->
-
-    <!-- Deskripsi — center -->
-
-    <!-- =============================================
-         BOTTOM CARD — Get Started + Categories
-         ============================================= -->
 
     <TextView
         android:id="@+id/tvHeadline"
@@ -138,7 +121,6 @@
             android:paddingTop="32dp"
             android:paddingBottom="40dp">
 
-            <!-- Tombol Get Started -->
             <Button
                 android:id="@+id/btnGetStarted"
                 android:layout_width="match_parent"
@@ -152,7 +134,6 @@
                 android:stateListAnimator="@null"
                 app:cornerRadius="14dp" />
 
-            <!-- Label Explore Categories -->
             <TextView
                 android:id="@+id/tvExploreLabel"
                 android:layout_width="wrap_content"
@@ -164,7 +145,6 @@
                 android:letterSpacing="0.14"
                 android:fontFamily="sans-serif" />
 
-            <!-- Chip Categories -->
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupCategories"
                 android:layout_width="wrap_content"

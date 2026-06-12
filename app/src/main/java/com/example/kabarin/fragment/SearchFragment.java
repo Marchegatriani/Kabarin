@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.example.kabarin.api.RetrofitClient;
 import com.example.kabarin.model.Article;
 import com.example.kabarin.model.NewsResponse;
 import com.example.kabarin.utils.Constants;
+import com.example.kabarin.utils.SavedNewsManager;
 
 import java.util.List;
 
@@ -46,8 +48,8 @@ public class SearchFragment extends Fragment {
     private TextView tvSearchStatus;
     private Button btnRetry;
     private String lastQuery = "";
+    private SavedNewsManager savedNewsManager;
 
-    // Handler for debouncing (delaying search while typing)
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
 
@@ -63,6 +65,8 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        savedNewsManager = new SavedNewsManager(requireContext());
+
         searchView = view.findViewById(R.id.searchView);
         rvSearchResult = view.findViewById(R.id.rvSearchResult);
         progressBar = view.findViewById(R.id.progressBar);
@@ -73,11 +77,9 @@ public class SearchFragment extends Fragment {
 
         rvSearchResult.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Configure SearchView to be open and focused immediately
         searchView.setIconified(false);
         searchView.requestFocus();
         
-        // Show keyboard automatically
         searchView.postDelayed(() -> {
             if (isAdded() && getContext() != null) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -102,27 +104,23 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Remove old callback whenever user types a new character
                 searchHandler.removeCallbacks(searchRunnable);
 
                 if (newText != null && !newText.trim().isEmpty()) {
-                    // Set loading status while waiting for debouncing
                     progressBar.setVisibility(View.VISIBLE);
                     layoutSearchStatus.setVisibility(View.GONE);
                     rvSearchResult.setVisibility(View.GONE);
 
-                    // Run search after 800ms delay
                     searchRunnable = () -> {
                         lastQuery = newText;
                         performSearch(newText);
                     };
                     searchHandler.postDelayed(searchRunnable, 800);
                 } else {
-                    // If text is cleared, hide loading and results
                     progressBar.setVisibility(View.GONE);
                     rvSearchResult.setVisibility(View.GONE);
                     layoutSearchStatus.setVisibility(View.VISIBLE);
-                    tvSearchStatus.setText("Start searching for your favorite news");
+                    tvSearchStatus.setText(R.string.start_searching);
                 }
                 return true;
             }
@@ -152,10 +150,11 @@ public class SearchFragment extends Fragment {
                             if (articles != null && !articles.isEmpty()) {
                                 showResults(articles);
                             } else {
-                                showEmptyState("No results found for \"" + query + "\"");
+                                String msg = getString(R.string.no_results, query);
+                                showEmptyState(msg);
                             }
                         } else {
-                            showErrorState("Failed to load results. Please try again.");
+                            showErrorState(getString(R.string.load_failed));
                         }
                     }
 
@@ -163,7 +162,7 @@ public class SearchFragment extends Fragment {
                     public void onFailure(Call<NewsResponse> call, Throwable t) {
                         if (!isAdded()) return;
                         progressBar.setVisibility(View.GONE);
-                        showErrorState("Connection problem. Please check your internet.");
+                        showErrorState(getString(R.string.connection_error));
                     }
                 });
     }
@@ -173,10 +172,20 @@ public class SearchFragment extends Fragment {
         layoutSearchStatus.setVisibility(View.GONE);
 
         NewsAdapter adapter = new NewsAdapter(articles, NewsAdapter.TYPE_LATEST, "Search Result");
+        adapter.setSavedNewsManager(savedNewsManager);
         adapter.setOnItemClickListener(article -> {
             Intent intent = new Intent(getContext(), NewsDetailActivity.class);
             intent.putExtra("article", article);
             startActivity(intent);
+        });
+        adapter.setOnSaveClickListener(article -> {
+            if (savedNewsManager.isSaved(article)) {
+                savedNewsManager.removeArticle(article);
+                Toast.makeText(getContext(), R.string.news_removed, Toast.LENGTH_SHORT).show();
+            } else {
+                savedNewsManager.saveArticle(article);
+                Toast.makeText(getContext(), R.string.news_saved, Toast.LENGTH_SHORT).show();
+            }
         });
         rvSearchResult.setAdapter(adapter);
     }
@@ -200,7 +209,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Clear handler when view is destroyed to avoid memory leak
         searchHandler.removeCallbacks(searchRunnable);
     }
 }
