@@ -60,6 +60,6 @@
 ---
 
 ## 👨‍💻 Author
-**[Marche Gatriani Sude]**  
+**Marche Gatriani Sude**  
 *Final Project - Lab Mobile Programming 2026*
 
