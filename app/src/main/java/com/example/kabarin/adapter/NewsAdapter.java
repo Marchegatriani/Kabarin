@@ -121,7 +121,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         h.tvAuthor.setText(author);
         h.tvTime.setText(formatTimeAgo(h.itemView.getContext(), article.getPublishedAt()));
 
-        // Using Smart Labeling
+        // Menggunakan Smart Labeling
         String displayLabel = inferCategory(article);
         h.tvCategory.setText("#" + displayLabel);
 
@@ -151,10 +151,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (savedNewsManager != null) {
             boolean isSaved = savedNewsManager.isSaved(article);
             if (isSaved) {
-                h.ivSave.setColorFilter(Color.parseColor("#1565C0")); // Blue color
+                h.ivSave.setColorFilter(Color.parseColor("#1565C0"));
                 h.ivSave.setAlpha(1.0f);
             } else {
-                h.ivSave.clearColorFilter(); // Revert to default
+                h.ivSave.clearColorFilter();
                 h.ivSave.setAlpha(0.4f);
             }
         }
@@ -172,7 +172,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private String inferCategory(Article article) {
-        if (!category.equalsIgnoreCase("general")) {
+        if (!category.equalsIgnoreCase("general") && !category.equalsIgnoreCase("Search Result")) {
             return category.toUpperCase();
         }
 
@@ -188,8 +188,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (text.contains("politic") || text.contains("government") || text.contains("election") || text.contains("president") || text.contains("minister")) return "POLITICS";
         if (text.contains("movie") || text.contains("music") || text.contains("entertainment") || text.contains("hollywood") || text.contains("celebrity")) return "ENTERTAINMENT";
         
-        // Fallback to source name if no keywords match
-        return (article.getSource() != null && article.getSource().getName() != null) 
+        return (article.getSource() != null && article.getSource().getName() != null)
                 ? article.getSource().getName().toUpperCase() : "GENERAL";
     }
 
