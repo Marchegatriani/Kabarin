@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -29,6 +30,7 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.kabarin.R;
+import com.example.kabarin.local.DatabaseHelper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -48,8 +50,10 @@ public class EditProfileFragment extends Fragment {
     private Button btnSave;
     private Toolbar toolbar;
     private SharedPreferences prefs;
+    private DatabaseHelper dbHelper;
     private FusedLocationProviderClient fusedLocationClient;
     private Uri selectedImageUri;
+    private String currentUserEmail;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -90,7 +94,9 @@ public class EditProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         prefs = requireActivity().getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
+        dbHelper = new DatabaseHelper(requireContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        currentUserEmail = prefs.getString("currentUserEmail", "");
 
         toolbar = view.findViewById(R.id.toolbar);
         ivProfilePhoto = view.findViewById(R.id.ivProfilePhoto);
@@ -101,17 +107,18 @@ public class EditProfileFragment extends Fragment {
         tlLocation = view.findViewById(R.id.tlLocation);
         btnSave = view.findViewById(R.id.btnSave);
 
-        String currentName = prefs.getString("userName", "User");
-        String currentUsername = prefs.getString("userNickname", "username");
-        String currentLocation = prefs.getString("userLocation", "Location");
-        String currentPhotoUri = prefs.getString("profileUri", null);
-
-        etFullName.setText(currentName);
-        etUsername.setText(currentUsername);
-        etLocation.setText(currentLocation);
-        
-        if (currentPhotoUri != null) {
-            Glide.with(this).load(Uri.parse(currentPhotoUri)).placeholder(R.drawable.ic_profile).into(ivProfilePhoto);
+        Cursor cursor = dbHelper.getUserData(currentUserEmail);
+        if (cursor != null && cursor.moveToFirst()) {
+            etFullName.setText(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+            etUsername.setText(cursor.getString(cursor.getColumnIndexOrThrow("nickname")));
+            etLocation.setText(cursor.getString(cursor.getColumnIndexOrThrow("location")));
+            String currentPhotoUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
+            
+            if (currentPhotoUri != null && !currentPhotoUri.isEmpty()) {
+                selectedImageUri = Uri.parse(currentPhotoUri);
+                Glide.with(this).load(selectedImageUri).placeholder(R.drawable.ic_profile).into(ivProfilePhoto);
+            }
+            cursor.close();
         }
 
         frameProfilePicture.setOnClickListener(v -> pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -124,17 +131,9 @@ public class EditProfileFragment extends Fragment {
             String newName = etFullName.getText().toString();
             String newUsername = etUsername.getText().toString();
             String newLocation = etLocation.getText().toString();
+            String photoStr = (selectedImageUri != null) ? selectedImageUri.toString() : "";
 
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("userName", newName);
-            editor.putString("userNickname", newUsername);
-            editor.putString("userLocation", newLocation);
-            
-            if (selectedImageUri != null) {
-                editor.putString("profileUri", selectedImageUri.toString());
-            }
-
-            editor.commit();
+            dbHelper.updateUserData(currentUserEmail, newName, newUsername, newLocation, photoStr);
 
             Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(view).navigateUp();

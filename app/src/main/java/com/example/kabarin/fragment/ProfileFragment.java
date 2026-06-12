@@ -3,6 +3,7 @@ package com.example.kabarin.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kabarin.R;
 import com.example.kabarin.activity.WelcomeActivity;
+import com.example.kabarin.local.DatabaseHelper;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -30,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvUserName, tvMemberBadge, tvUserBio;
     private SwitchMaterial switchDarkMode;
     private SharedPreferences prefs;
+    private DatabaseHelper dbHelper;
 
     public ProfileFragment() {}
 
@@ -43,6 +46,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         prefs = requireActivity().getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
+        dbHelper = new DatabaseHelper(requireContext());
 
         ivProfilePhoto = view.findViewById(R.id.ivProfilePhoto);
         tvUserName = view.findViewById(R.id.tvUserName);
@@ -79,25 +83,31 @@ public class ProfileFragment extends Fragment {
     private void updateUI() {
         if (!isAdded()) return;
 
-        String name = prefs.getString("userName", "User");
-        String username = prefs.getString("userNickname", "username");
-        String location = prefs.getString("userLocation", "Location");
-        String photoUri = prefs.getString("profileUri", null);
+        String currentEmail = prefs.getString("currentUserEmail", "");
+        Cursor cursor = dbHelper.getUserData(currentEmail);
 
-        tvUserName.setText(name);
-        tvMemberBadge.setText("@" + username);
-        tvUserBio.setText(location);
+        if (cursor != null && cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            String nickname = cursor.getString(cursor.getColumnIndexOrThrow("nickname"));
+            String location = cursor.getString(cursor.getColumnIndexOrThrow("location"));
+            String photoUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
 
-        if (photoUri != null && !photoUri.isEmpty()) {
-            Glide.with(this)
-                    .load(Uri.parse(photoUri))
-                    .placeholder(R.drawable.ic_profile)
-                    .error(R.drawable.ic_profile)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(ivProfilePhoto);
-        } else {
-            ivProfilePhoto.setImageResource(R.drawable.ic_profile);
+            tvUserName.setText(name);
+            tvMemberBadge.setText("@" + nickname);
+            tvUserBio.setText(location);
+
+            if (photoUri != null && !photoUri.isEmpty()) {
+                Glide.with(this)
+                        .load(Uri.parse(photoUri))
+                        .placeholder(R.drawable.ic_profile)
+                        .error(R.drawable.ic_profile)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(ivProfilePhoto);
+            } else {
+                ivProfilePhoto.setImageResource(R.drawable.ic_profile);
+            }
+            cursor.close();
         }
     }
 
@@ -108,6 +118,7 @@ public class ProfileFragment extends Fragment {
                 .setMessage("Yakin ingin keluar?")
                 .setPositiveButton("Ya", (d, w) -> {
                     prefs.edit().putBoolean("isLogin", false).apply();
+                    prefs.edit().remove("currentUserEmail").apply(); // Hapus email saat logout
                     
                     Intent intent = new Intent(requireContext(), WelcomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

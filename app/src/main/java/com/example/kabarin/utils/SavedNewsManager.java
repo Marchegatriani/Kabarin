@@ -10,13 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SavedNewsManager {
-    private static final String PREF_NAME = "saved_news_pref";
+    private static final String PREF_PREFIX = "saved_news_";
     private static final String KEY_SAVED_ARTICLES = "saved_articles";
     private SharedPreferences sharedPreferences;
     private Gson gson;
 
     public SavedNewsManager(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences mainPrefs = context.getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
+        String currentUserEmail = mainPrefs.getString("currentUserEmail", "guest");
+        
+        // Menggunakan file preference unik per user berdasarkan email
+        sharedPreferences = context.getSharedPreferences(PREF_PREFIX + currentUserEmail, Context.MODE_PRIVATE);
         gson = new Gson();
     }
 

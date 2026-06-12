@@ -14,8 +14,9 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "kabarin_news.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // Naikkan versi karena ada tabel baru
 
+    // Tabel Berita (Cache)
     private static final String TABLE_NEWS = "news_cache";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_TITLE = "title";
@@ -25,13 +26,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SOURCE = "source";
     private static final String COLUMN_PUBLISHED_AT = "published_at";
 
+    // Tabel User
+    private static final String TABLE_USERS = "users";
+    private static final String COL_USER_EMAIL = "email";
+    private static final String COL_USER_NAME = "name";
+    private static final String COL_USER_PASSWORD = "password";
+    private static final String COL_USER_NICKNAME = "nickname";
+    private static final String COL_USER_LOCATION = "location";
+    private static final String COL_USER_IMAGE = "image_uri";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NEWS + "("
+        String CREATE_NEWS_TABLE = "CREATE TABLE " + TABLE_NEWS + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_TITLE + " TEXT,"
                 + COLUMN_DESCRIPTION + " TEXT,"
@@ -39,14 +49,72 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_ARTICLE_URL + " TEXT,"
                 + COLUMN_SOURCE + " TEXT,"
                 + COLUMN_PUBLISHED_AT + " TEXT" + ")";
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_NEWS_TABLE);
+
+        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
+                + COL_USER_EMAIL + " TEXT PRIMARY KEY,"
+                + COL_USER_NAME + " TEXT,"
+                + COL_USER_PASSWORD + " TEXT,"
+                + COL_USER_NICKNAME + " TEXT,"
+                + COL_USER_LOCATION + " TEXT,"
+                + COL_USER_IMAGE + " TEXT" + ")";
+        db.execSQL(CREATE_USERS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
-        onCreate(db);
+        if (oldVersion < 2) {
+            String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
+                    + COL_USER_EMAIL + " TEXT PRIMARY KEY,"
+                    + COL_USER_NAME + " TEXT,"
+                    + COL_USER_PASSWORD + " TEXT,"
+                    + COL_USER_NICKNAME + " TEXT,"
+                    + COL_USER_LOCATION + " TEXT,"
+                    + COL_USER_IMAGE + " TEXT" + ")";
+            db.execSQL(CREATE_USERS_TABLE);
+        }
     }
+
+    // --- User Methods ---
+
+    public boolean addUser(String name, String email, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_USER_NAME, name);
+        values.put(COL_USER_EMAIL, email);
+        values.put(COL_USER_PASSWORD, password);
+        values.put(COL_USER_NICKNAME, name.toLowerCase().replace(" ", ""));
+        values.put(COL_USER_LOCATION, "Indonesia");
+
+        long result = db.insert(TABLE_USERS, null, values);
+        return result != -1;
+    }
+
+    public boolean checkUser(String email, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, null, COL_USER_EMAIL + "=? AND " + COL_USER_PASSWORD + "=?",
+                new String[]{email, password}, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
+    }
+
+    public Cursor getUserData(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(TABLE_USERS, null, COL_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+    }
+
+    public void updateUserData(String email, String name, String nick, String loc, String img) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_USER_NAME, name);
+        values.put(COL_USER_NICKNAME, nick);
+        values.put(COL_USER_LOCATION, loc);
+        values.put(COL_USER_IMAGE, img);
+        db.update(TABLE_USERS, values, COL_USER_EMAIL + "=?", new String[]{email});
+    }
+
+    // --- News Cache Methods ---
 
     public void clearCache() {
         SQLiteDatabase db = this.getWritableDatabase();

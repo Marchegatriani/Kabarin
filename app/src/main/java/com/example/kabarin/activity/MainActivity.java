@@ -2,6 +2,7 @@ package com.example.kabarin.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.kabarin.R;
+import com.example.kabarin.local.DatabaseHelper;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private AppBarLayout appBarLayout;
     private ShapeableImageView ivToolbarProfile;
     private SharedPreferences prefs;
+    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         prefs = getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
         prefs.registerOnSharedPreferenceChangeListener(this);
+        dbHelper = new DatabaseHelper(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -91,14 +95,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         appBarLayout.setExpanded(false, false);
                     }
                     params.setBehavior(null);
-                    params.bottomMargin = 0; // Search full screen
+                    params.bottomMargin = 0; 
                 } else {
                     if (appBarLayout != null) {
                         appBarLayout.setVisibility(View.VISIBLE);
                         appBarLayout.setExpanded(true, false);
                     }
                     params.setBehavior(new AppBarLayout.ScrollingViewBehavior());
-                    params.bottomMargin = bottomNavHeight; // Berikan ruang agar FAB tidak tertutup BottomNav
+                    params.bottomMargin = bottomNavHeight; 
 
                     if (ivToolbarProfile != null) {
                         if (destId == R.id.nav_profile || destId == R.id.nav_edit_profile) {
@@ -117,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if ("profileUri".equals(key)) {
+        // Trigger update jika ada perubahan krusial
+        if ("currentUserEmail".equals(key)) {
             updateToolbarProfileImage();
         }
     }
@@ -137,18 +142,32 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     public void updateToolbarProfileImage() {
-        String photoUri = prefs.getString("profileUri", null);
-        if (ivToolbarProfile != null) {
-            if (photoUri != null && !photoUri.isEmpty()) {
-                Glide.with(this)
-                        .load(Uri.parse(photoUri))
-                        .placeholder(R.drawable.ic_profile)
-                        .error(R.drawable.ic_profile)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(ivToolbarProfile);
-            } else {
-                ivToolbarProfile.setImageResource(R.drawable.ic_profile);
-            }
+        if (ivToolbarProfile == null) return;
+        
+        String currentEmail = prefs.getString("currentUserEmail", "");
+        if (currentEmail.isEmpty()) {
+            ivToolbarProfile.setImageResource(R.drawable.ic_profile);
+            return;
+        }
+
+        Cursor cursor = dbHelper.getUserData(currentEmail);
+        String photoUri = null;
+        
+        if (cursor != null && cursor.moveToFirst()) {
+            photoUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
+            cursor.close();
+        }
+
+        if (photoUri != null && !photoUri.isEmpty()) {
+            Glide.with(this)
+                    .load(Uri.parse(photoUri))
+                    .placeholder(R.drawable.ic_profile)
+                    .error(R.drawable.ic_profile)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .circleCrop() // Memastikan foto tetap bulat sempurna
+                    .into(ivToolbarProfile);
+        } else {
+            ivToolbarProfile.setImageResource(R.drawable.ic_profile);
         }
     }
 
