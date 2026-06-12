@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,13 +59,19 @@ public class ProfileFragment extends Fragment {
         updateUI();
 
         boolean isDarkMode = prefs.getBoolean("isDarkMode", false);
+        switchDarkMode.setOnCheckedChangeListener(null);
         switchDarkMode.setChecked(isDarkMode);
+        
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean("isDarkMode", isChecked).apply();
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            if (isChecked != prefs.getBoolean("isDarkMode", false)) {
+                prefs.edit().putBoolean("isDarkMode", isChecked).apply();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    if (isChecked) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                }, 100);
             }
         });
 
@@ -112,20 +120,31 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setupSignOut(View view) {
-        view.findViewById(R.id.layoutSignOut).setOnClickListener(v -> 
-            new AlertDialog.Builder(requireContext())
-                .setTitle("Logout")
-                .setMessage("Yakin ingin keluar?")
-                .setPositiveButton("Ya", (d, w) -> {
-                    prefs.edit().putBoolean("isLogin", false).apply();
-                    prefs.edit().remove("currentUserEmail").apply(); // Hapus email saat logout
-                    
-                    Intent intent = new Intent(requireContext(), WelcomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    requireActivity().finish();
-                })
-                .setNegativeButton("Tidak", null)
-                .show());
+        View btnSignOut = view.findViewById(R.id.layoutSignOut);
+        if (btnSignOut != null) {
+            btnSignOut.setOnClickListener(v -> {
+                Context context = getContext();
+                if (context == null) return;
+                
+                new AlertDialog.Builder(context)
+                    .setTitle("Logout")
+                    .setMessage("Yakin ingin keluar?")
+                    .setPositiveButton("Ya", (d, w) -> {
+                        prefs.edit()
+                            .putBoolean("isLogin", false)
+                            .remove("currentUserEmail")
+                            .commit();
+                        
+                        Intent intent = new Intent(context, WelcomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        if (getActivity() != null) {
+                            getActivity().finish();
+                        }
+                    })
+                    .setNegativeButton("Tidak", null)
+                    .show();
+            });
+        }
     }
 }

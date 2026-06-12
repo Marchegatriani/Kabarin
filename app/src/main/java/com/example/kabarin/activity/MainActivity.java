@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,6 +25,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -34,16 +36,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private ShapeableImageView ivToolbarProfile;
     private SharedPreferences prefs;
     private DatabaseHelper dbHelper;
+    private ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        applySavedTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         prefs = getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
         prefs.registerOnSharedPreferenceChangeListener(this);
         dbHelper = new DatabaseHelper(this);
+        executorService = Executors.newSingleThreadExecutor();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         appBarLayout = findViewById(R.id.appBarLayout);
@@ -76,7 +79,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             if (ivToolbarProfile != null) {
                 ivToolbarProfile.setOnClickListener(v -> {
-                    navController.navigate(R.id.nav_profile);
+                    if (navController.getCurrentDestination() != null && 
+                        navController.getCurrentDestination().getId() != R.id.nav_profile) {
+                        navController.navigate(R.id.nav_profile);
+                    }
                 });
                 updateToolbarProfileImage();
             }
@@ -109,19 +115,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             ivToolbarProfile.setVisibility(View.GONE);
                         } else {
                             ivToolbarProfile.setVisibility(View.VISIBLE);
-                            updateToolbarProfileImage(); 
+                            // Hindari pemanggilan updateToolbarProfileImage() yang terlalu sering di sini
                         }
                     }
                 }
                 container.setLayoutParams(params);
-                container.requestLayout();
             });
         }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // Trigger update jika ada perubahan krusial
         if ("currentUserEmail".equals(key)) {
             updateToolbarProfileImage();
         }
@@ -139,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (prefs != null) {
             prefs.unregisterOnSharedPreferenceChangeListener(this);
         }
+        if (executorService != null) {
+            executorService.shutdown();
+        }
     }
 
     public void updateToolbarProfileImage() {
@@ -150,36 +157,30 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             return;
         }
 
-        Cursor cursor = dbHelper.getUserData(currentEmail);
-        String photoUri = null;
-        
-        if (cursor != null && cursor.moveToFirst()) {
-            photoUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
-            cursor.close();
-        }
+        executorService.execute(() -> {
+            Cursor cursor = dbHelper.getUserData(currentEmail);
+            String photoUri = null;
+            
+            if (cursor != null && cursor.moveToFirst()) {
+                photoUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
+                cursor.close();
+            }
 
-        if (photoUri != null && !photoUri.isEmpty()) {
-            Glide.with(this)
-                    .load(Uri.parse(photoUri))
-                    .placeholder(R.drawable.ic_profile)
-                    .error(R.drawable.ic_profile)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .circleCrop() // Memastikan foto tetap bulat sempurna
-                    .into(ivToolbarProfile);
-        } else {
-            ivToolbarProfile.setImageResource(R.drawable.ic_profile);
-        }
-    }
-
-    private void applySavedTheme() {
-        SharedPreferences prefs = getSharedPreferences("KabarinPrefs", Context.MODE_PRIVATE);
-        if (!prefs.contains("isDarkMode")) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        } else {
-            boolean isDarkMode = prefs.getBoolean("isDarkMode", false);
-            AppCompatDelegate.setDefaultNightMode(isDarkMode ? 
-                    AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        }
+            final String finalUri = photoUri;
+            runOnUiThread(() -> {
+                if (finalUri != null && !finalUri.isEmpty()) {
+                    Glide.with(MainActivity.this)
+                            .load(Uri.parse(finalUri))
+                            .placeholder(R.drawable.ic_profile)
+                            .error(R.drawable.ic_profile)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .circleCrop()
+                            .into(ivToolbarProfile);
+                } else {
+                    ivToolbarProfile.setImageResource(R.drawable.ic_profile);
+                }
+            });
+        });
     }
 
     @Override
