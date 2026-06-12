@@ -381,7 +381,7 @@
                     android:id="@+id/tvSignOut"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sign_out"
+                    android:text="@string/Logout"
                     android:textColor="#BA1A1A"
                     android:textSize="14sp"
                     android:textStyle="bold" />

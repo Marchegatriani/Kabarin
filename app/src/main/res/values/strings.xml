@@ -59,7 +59,7 @@
     <string name="notifications_desc">Breaking news &amp; alerts</string>
     <string name="about_app">About Kabarin</string>
     <string name="about_desc">v1.0.0 • Terms &amp; Privacy</string>
-    <string name="sign_out">Sign Out</string>
+    <string name="Logout">Logout</string>
 
     <!-- Edit Profile Screen -->
     <string name="edit_profile">Edit Profile</string>
