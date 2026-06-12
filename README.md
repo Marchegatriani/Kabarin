@@ -39,7 +39,7 @@
 
 ---
 
-## 📸 Screenshots
+## Tampilan Aplikasi
 | Halaman | Tampilan Layar | Halaman | Tampilan Layar | Halaman | Tampilan Layar |
 | :--- | :---: | :--- | :---: | :--- | :---: |
 | **Welcome** | <img src="screenshoots/welcome.jpeg" alt="Halaman Welcome" width="250"> | **Started** | <img src="screenshoots/started.jpeg" alt="Halaman Started" width="250"> | **Login** | <img src="screenshoots/login.jpeg" alt="Halaman Login" width="250"> |
