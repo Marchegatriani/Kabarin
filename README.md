@@ -16,8 +16,8 @@
 
 ## 🛠️ Spesifikasi Teknis
 
-1. **Activity & Intent:** Implementasi minimal dua activity (Splash, Login, Register, Main, Detail) dengan perpindahan data antar activity menggunakan Intent.
-2. **RecyclerView:** Menampilkan daftar berita secara dinamis dengan performa yang dioptimalkan.
+1. **Activity & Intent:** Implementasi activity (Splash, Login, Register, Main, Detail) dengan perpindahan data antar activity menggunakan Intent.
+2. **RecyclerView:** Menampilkan daftar berita secara dinamis.
 3. **Fragment & Navigation:** Menggunakan *Navigation Component* untuk mengelola navigasi antar fragment (Home, Search, Saved, Profile).
 4. **Background Thread:** Menjalankan operasi database dan delay menggunakan `ExecutorService` dan `Handler`.
 5. **Networking (Retrofit):** Mengambil data dari NewsAPI secara asinkron menggunakan library Retrofit.
@@ -54,4 +54,12 @@
 2. Buka project menggunakan **Android Studio**.
 3. Pastikan kamu memiliki **API Key** dari [newsapi.org](https://newsapi.org/).
 4. Masukkan API Key tersebut ke dalam file `Constants.java`:
-   
+
+5. Build dan Run aplikasi di Emulator atau Perangkat Fisik.
+
+---
+
+## 👨‍💻 Author
+**[Marche Gatriani Sude]**  
+*Final Project - Lab Mobile Programming 2026*
+
