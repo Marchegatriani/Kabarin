@@ -1,3 +1,4 @@
+<img width="720" height="1600" alt="home" src="https://github.com/user-attachments/assets/9ad0c803-da8a-482c-baad-d7288e9f1e34" />
 # Kabarin - News App 📰
 
 **Kabarin** adalah aplikasi berita modern berbasis Android yang menyajikan informasi terkini dari berbagai kategori.
