@@ -1,6 +1,6 @@
 # Kabarin - News App 📰
 
-**Kabarin** adalah aplikasi berita berbasis Android yang menyajikan informasi terkini dari berbagai kategori.
+**Kabarin** : aplikasi berita berbasis Android yang menyajikan informasi terkini dari berbagai negara dan kategori.
 
 ---
 
@@ -40,12 +40,11 @@
 ---
 
 ## 📸 Screenshots
-**| Halaman | Tampilan Layar | Halaman | Tampilan Layar |**
-| :--- | :---: | :--- | :---: |
-| **Welcome** | <img src="screenshoots/welcome.jpeg" alt="Halaman Welcome" width="250"> | **Started** | <img src="screenshoots/started.jpeg" alt="Halaman Started" width="250"> |
-| **Login** | <img src="screenshoots/login.jpeg" alt="Halaman Login" width="250"> | **Register** | <img src="screenshoots/register.jpeg" alt="Halaman Register" width="250"> |
-| **Home** | <img src="screenshoots/home.jpeg" alt="Halaman Home" width="250"> | | **Profil** | <img src="screenshoots/profile.jpeg" alt="Halaman Profil" width="250"> |
-| **Saved** | <img src="screenshoots/saved.jpeg" alt="Halaman Saved" width="250"> |
+| Halaman | Tampilan Layar | Halaman | Tampilan Layar | Halaman | Tampilan Layar |
+| :--- | :---: | :--- | :---: | :--- | :---: |
+| **Welcome** | <img src="screenshoots/welcome.jpeg" alt="Halaman Welcome" width="250"> | **Started** | <img src="screenshoots/started.jpeg" alt="Halaman Started" width="250"> | **Login** | <img src="screenshoots/login.jpeg" alt="Halaman Login" width="250"> |
+| **Register** | <img src="screenshoots/register.jpeg" alt="Halaman Register" width="250"> | **Home** | <img src="screenshoots/home.jpeg" alt="Halaman Home" width="250"> | **Profil** | <img src="screenshoots/profile.jpeg" alt="Halaman Profil" width="250"> |
+| **Saved** | <img src="screenshoots/saved.jpeg" alt="Halaman Saved" width="250"> | &nbsp; | &nbsp; | &nbsp; | &nbsp; |
 
 
 ---
