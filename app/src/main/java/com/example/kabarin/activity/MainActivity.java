@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             if (ivToolbarProfile != null) {
                 ivToolbarProfile.setOnClickListener(v -> {
-                    if (navController.getCurrentDestination() != null && 
+                    if (!isFinishing() && !isDestroyed() && navController.getCurrentDestination() != null && 
                         navController.getCurrentDestination().getId() != R.id.nav_profile) {
                         navController.navigate(R.id.nav_profile);
                     }
@@ -88,8 +88,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             }
 
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                int destId = destination.getId();
+                if (isFinishing() || isDestroyed()) return;
                 
+                int destId = destination.getId();
                 View container = findViewById(R.id.fragmentContainer);
                 CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) container.getLayoutParams();
                 
@@ -115,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             ivToolbarProfile.setVisibility(View.GONE);
                         } else {
                             ivToolbarProfile.setVisibility(View.VISIBLE);
-                            // Hindari pemanggilan updateToolbarProfileImage() yang terlalu sering di sini
                         }
                     }
                 }
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (isFinishing() || isDestroyed()) return;
         if ("currentUserEmail".equals(key)) {
             updateToolbarProfileImage();
         }
@@ -139,17 +140,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (prefs != null) {
             prefs.unregisterOnSharedPreferenceChangeListener(this);
         }
         if (executorService != null) {
-            executorService.shutdown();
+            executorService.shutdownNow();
         }
+        super.onDestroy();
     }
 
     public void updateToolbarProfileImage() {
-        if (ivToolbarProfile == null) return;
+        if (ivToolbarProfile == null || isFinishing() || isDestroyed()) return;
         
         String currentEmail = prefs.getString("currentUserEmail", "");
         if (currentEmail.isEmpty()) {
@@ -158,16 +159,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
 
         executorService.execute(() -> {
-            Cursor cursor = dbHelper.getUserData(currentEmail);
+            if (isFinishing() || isDestroyed()) return;
+            
+            DatabaseHelper db = new DatabaseHelper(MainActivity.this);
+            Cursor cursor = db.getUserData(currentEmail);
             String photoUri = null;
             
             if (cursor != null && cursor.moveToFirst()) {
                 photoUri = cursor.getString(cursor.getColumnIndexOrThrow("image_uri"));
                 cursor.close();
             }
+            db.close();
 
             final String finalUri = photoUri;
             runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed()) return;
+
                 if (finalUri != null && !finalUri.isEmpty()) {
                     Glide.with(MainActivity.this)
                             .load(Uri.parse(finalUri))
