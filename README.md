@@ -42,7 +42,14 @@
 ## 📸 Screenshots
 | Penjelasan Fitur | Tampilan Layar |
 | :--- | :---: |
-| **Home**<br><br>Halaman ini merupakan tampilan awal aplikasi yang memudahkan pengguna melihat berita.![Home]([https://via.placeholder.com/150](https://github.com/Marchegatriani/Kabarin/blob/main/screenshoots/home.jpeg)) |
+| **Welcome** | ![Welcome](screenshoots/welcome.jpeg) |
+| **Started** | ![Started](screenshoots/started.jpeg) |
+| **Login** | ![Login](screenshoots/login.jpeg) |
+| **Register** | ![Register](screenshoots/register.jpeg) |
+| **Home** | ![Home](screenshoots/home.jpeg) |
+| **Profil** | ![Profil](screenshoots/profil.jpeg) |
+| **Saved** | ![Home](screenshoots/saved.jpeg) |
+
 
 ---
 
